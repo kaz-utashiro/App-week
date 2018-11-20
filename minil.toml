@@ -1,0 +1,6 @@
+name = "App-week"
+# badges = ["travis"]
+authority="cpan:UTASHIRO"
+
+module_maker="ModuleBuildTiny"
+
