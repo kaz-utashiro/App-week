@@ -14,26 +14,26 @@ __END__
 
 =head1 NAME
 
-App::week - It's new $module
+week - colorful calender command
 
 =head1 SYNOPSIS
 
-    use App::week;
+B<week> [ -MI<module> ] [ option ] [ date ]
 
 =head1 DESCRIPTION
 
-App::week is ...
-
-=head1 LICENSE
-
-Copyright (C) Kaz Utashiro.
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+Yet another calendar command.  Read script manual for detail.
 
 =head1 AUTHOR
 
-Kaz Utashiro E<lt>kaz@utashiro.comE<gt>
+Kazumasa Utashiro E<lt>kaz@utashiro.comE<gt>
+
+=head1 LICENSE
+
+Copyright (C) 2018- Kazumasa Utashiro.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
 
 =cut
 
