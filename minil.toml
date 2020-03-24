@@ -1,4 +1,5 @@
 name = "App-week"
+readme_from = "script/week"
 # badges = ["travis"]
 authority="cpan:UTASHIRO"
 

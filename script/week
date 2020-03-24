@@ -29,6 +29,10 @@ Module options:
     --green
     --pastel
 
+=head1 VERSION
+
+Version 0.01
+
 =head1 DESCRIPTION
 
 By default, B<week> command display the previous, current and next

@@ -25,6 +25,10 @@ Module options:
     --green
     --pastel
 
+# VERSION
+
+Version 0.01
+
 # DESCRIPTION
 
 By default, **week** command display the previous, current and next
