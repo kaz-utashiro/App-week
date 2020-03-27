@@ -5,6 +5,11 @@ use Test::More;
 use File::Spec;
 use Data::Dumper;
 
+use lib '.';
+use t::Util;
+$Script::lib    = File::Spec->rel2abs('lib');
+$Script::script = File::Spec->rel2abs('script/week');
+
 my %result = (
 '157209' => <<END
                           
@@ -20,10 +25,9 @@ my %result = (
 END
 );
 
-is(week(qw(--cm *= -C0 1752/9/2)), $result{157209}, "1752/9/2");
+$ENV{LANG} = 'C';
+
+my $week = Script->new([qw(--cm *= -C0 1752/9/2)])->run;
+is($week->result, $result{157209}, "1752/9/2");
 
 done_testing;
-
-sub week {
-    qx{LANG=C week @_};
-}
