@@ -2,6 +2,10 @@ Revision history for Perl extension App-week
 
 {{$NEXT}}
 
+0.03 2020-03-30T02:56:58Z
+
+    - Eliminate to use -h option.
+
 0.02 2020-03-27T04:09:57Z
 
     - Set default value of -Y to one.

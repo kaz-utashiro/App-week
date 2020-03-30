@@ -31,7 +31,7 @@ Module options:
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =head1 DESCRIPTION
 
@@ -387,7 +387,8 @@ package App::week::CalYear {
     }
     sub CalYear {
 	my $year = shift;
-	my @cal = `cal -h $year`;
+	my $cal = `cal $year` =~ s/_[\b]//gr;
+	my @cal = $cal =~ /.+/g;
 	my @month = ( [ $cal[0] ], map [], 1..12 );
 	my @monthline = do {
 	    map  { $_ - 2 }		    # 2 lines up
