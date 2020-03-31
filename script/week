@@ -31,7 +31,7 @@ Module options:
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =head1 DESCRIPTION
 
@@ -207,7 +207,7 @@ my $opt_year;
 my $opt_Y;
 my $opt_usage;
 my @opt_catch_all;
-our $opt_crashspace;
+our %debug;
 
 my %month = do {
     my $i;
@@ -224,7 +224,7 @@ my @optargs = (
     "colormap|cm=s" => \@opt_colormap,
     "colordump"     => \$opt_colordump,
     "usage:s"       => \$opt_usage,
-    "crashspace!"   => \$opt_crashspace,
+    "crashspace!"   => \$debug{crashspace},
     "<>" => sub {
 	local $_ = $_[0];
 	if (/^-+([0-9]+)$/) {
@@ -390,7 +390,7 @@ package App::week::CalYear {
     sub CalYear {
 	my $year = sprintf "%4d", shift;
 	my $cal = `cal $year` =~ s/_[\b]//gr;
-	if ($main::opt_crashspace) {
+	if ($main::debug{crashspace}) {
 	    $cal =~ s/ +$//mg;
 	}
 	my @cal = split /\n/, $cal, -1;
@@ -430,9 +430,11 @@ package App::week::CalYear {
 		$_ = " $_ ";
 	    }
 	    for ($month->[0]) {
-		## Need to handle cal(1) command bug.
-		while (/^ (( +)\S+( +))$/ and length($2) > length($3)) {
-		    $_ = "${1} ";
+		## Fix month name:
+		## 1) Take care of cal(1) multibyte string bug.
+		## 2) Normalize off-to-right to off-to-left.
+		while (/^ (( +)\S+( +))$/ and length($2) >= length($3)) {
+		    $_ = "$1 ";
 		}
 	    }
 	}

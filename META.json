@@ -66,7 +66,7 @@
          "web" : "https://github.com/kaz-utashiro/App-week"
       }
    },
-   "version" : "0.05",
+   "version" : "0.06",
    "x_authority" : "cpan:UTASHIRO",
    "x_static_install" : 0
 }
