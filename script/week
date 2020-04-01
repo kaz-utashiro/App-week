@@ -20,7 +20,10 @@ Options:
     -Y[n]   Display n years of calender
     -c n    Display calendar in n column (default 3).
 
-    --colormap  FIELD=COLOR
+Color options:
+
+    --colormap  Specify colormap
+    --rgb24     Use 24bit RGB color ANSI sequence
 
 Module options:
 
@@ -206,7 +209,7 @@ my @opt_colormap;
 my $opt_year;
 my $opt_Y;
 my $opt_usage;
-my @opt_catch_all;
+my $opt_rgb24;
 our %debug;
 
 my %month = do {
@@ -223,6 +226,7 @@ my @optargs = (
     "column|c=n"    => \$opt_column,
     "colormap|cm=s" => \@opt_colormap,
     "colordump"     => \$opt_colordump,
+    "rgb24!"        => \$opt_rgb24,
     "usage:s"       => \$opt_usage,
     "crashspace!"   => \$debug{crashspace},
     "<>" => sub {
@@ -266,6 +270,9 @@ use Getopt::EX::Colormap;
 my $cm = Getopt::EX::Colormap
     ->new(HASH => \%colormap)
     ->load_params(@opt_colormap);
+
+$Getopt::EX::Colormap::RGB24 = $opt_rgb24
+    if defined $opt_rgb24;
 
 sub color {
     $cm->color(@_);
