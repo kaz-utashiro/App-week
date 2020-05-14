@@ -93,8 +93,9 @@ option with **LABEL**=_colorspec_ syntax.  Default color is:
     --colormap  THISWEEK=L05/445 \
     --colormap THISMONTH=555/113
 
-Colormap is handled by [Getopt::EX::Colormap](https://metacpan.org/pod/Getopt::EX::Colormap) module; use \`perldoc
-Getopt::EX::Colormap\` for detail.
+Three digit means 216 RGB values from 000 to 555, and Lxx means 24
+gray scales.  Colormap is handled by [Getopt::EX::Colormap](https://metacpan.org/pod/Getopt::EX::Colormap) module;
+use \`perldoc Getopt::EX::Colormap\` for detail.
 
 You can add special effect afterward.  For example, put next line in
 your `~/.weekrc` to blink today.  `$<move>` indicates to move
