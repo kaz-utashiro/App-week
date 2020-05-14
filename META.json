@@ -42,7 +42,8 @@
       },
       "runtime" : {
          "requires" : {
-            "Getopt::EX" : "v1.14.0",
+            "Getopt::EX" : "v1.18.0",
+            "Getopt::EX::termcolor" : "1.06",
             "Text::ANSI::Fold" : "1.03",
             "Text::VisualWidth::PP" : "0.05",
             "perl" : "5.014"
@@ -66,7 +67,7 @@
          "web" : "https://github.com/kaz-utashiro/App-week"
       }
    },
-   "version" : "0.08",
+   "version" : "0.09",
    "x_authority" : "cpan:UTASHIRO",
    "x_serialization_backend" : "JSON::PP version 4.04",
    "x_static_install" : 0

@@ -34,7 +34,7 @@ Module options:
 
 =head1 VERSION
 
-Version 0.08
+Version 0.09
 
 =head1 DESCRIPTION
 
@@ -263,7 +263,8 @@ sub usage {
 ##
 ## Getopt staff
 ##
-use Getopt::EX::Long qw(:DEFAULT Configure);
+use Getopt::EX::Long qw(:DEFAULT Configure ExConfigure);
+ExConfigure BASECLASS => [ "App::week", "Getopt::EX", "" ];
 Configure qw(bundling no_getopt_compat no_ignore_case pass_through);
 GetOptions(@optargs) || usage({status => 1});
 
