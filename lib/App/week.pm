@@ -14,7 +14,7 @@ __END__
 
 =head1 NAME
 
-week - colorful calender command
+week - colorful calendar command
 
 =head1 SYNOPSIS
 

@@ -1,16 +1,16 @@
 {
-   "abstract" : "colorful calender command",
+   "abstract" : "colorful calendar command",
    "author" : [
       "Kazumasa Utashiro <kaz@utashiro.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v3.1.9, CPAN::Meta::Converter version 2.143240",
+   "generated_by" : "Minilla/v3.1.10, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
-      "version" : "2"
+      "version" : 2
    },
    "name" : "App-week",
    "no_index" : {
@@ -68,5 +68,6 @@
    },
    "version" : "0.08",
    "x_authority" : "cpan:UTASHIRO",
+   "x_serialization_backend" : "JSON::PP version 4.04",
    "x_static_install" : 0
 }
