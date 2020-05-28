@@ -2,6 +2,10 @@ Revision history for Perl extension App-week
 
 {{$NEXT}}
 
+0.10 2020-05-28T01:37:51Z
+
+    - Update teams.pm.
+
 0.09 2020-05-14T17:37:05Z
 
     - Update to use -Mtermcolor.
