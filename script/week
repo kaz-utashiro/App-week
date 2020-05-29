@@ -34,7 +34,7 @@ Module options:
 
 =head1 VERSION
 
-Version 0.08
+Version 0.10
 
 =head1 DESCRIPTION
 
@@ -96,8 +96,9 @@ option with B<LABEL>=I<colorspec> syntax.  Default color is:
     --colormap  THISWEEK=L05/445 \
     --colormap THISMONTH=555/113
 
-Colormap is handled by L<Getopt::EX::Colormap> module; use `perldoc
-Getopt::EX::Colormap` for detail.
+Three digit means 216 RGB values from 000 to 555, and Lxx means 24
+gray scales.  Colormap is handled by L<Getopt::EX::Colormap> module;
+use `perldoc Getopt::EX::Colormap` for detail.
 
 You can add special effect afterward.  For example, put next line in
 your F<~/.weekrc> to blink today.  C<< $<move> >> indicates to move
@@ -133,9 +134,11 @@ load appropriate module automatically in default start up module
 
 =item B<-Mteams>
 
-    --tigers
-    --giants
-    --lions
+    --team teamname
+
+    --tigers, --tigers-rev
+    --giants, --giants-rev
+    --lions, --lions-rev
 
 =back
 
@@ -145,6 +148,8 @@ site.
 =head1 SEE ALSO
 
 L<https://github.com/kaz-utashiro/App-week>
+
+L<https://github.com/kaz-utashiro/Getopt-EX-termcolor>
 
 L<Getopt::EX::Colormap>
 
@@ -262,7 +267,8 @@ sub usage {
 ##
 ## Getopt staff
 ##
-use Getopt::EX::Long qw(:DEFAULT Configure);
+use Getopt::EX::Long qw(:DEFAULT Configure ExConfigure);
+ExConfigure BASECLASS => [ "App::week", "Getopt::EX", "" ];
 Configure qw(bundling no_getopt_compat no_ignore_case pass_through);
 GetOptions(@optargs) || usage({status => 1});
 
@@ -317,9 +323,9 @@ $opt_A //= 1;
 $year += $year < 50 ? 2000 : $year < 100 ? 1900 : 0;
 
 calendar(
-    (map { calref($year, $mon + $_) } -$opt_B .. -1),
-    calref($year, $mon, $mday),
-    (map { calref($year, $mon + $_) } 1 .. $opt_A)
+    ( map { calref($year, $mon + $_) } -$opt_B .. -1 ) ,
+    (       calref($year, $mon, $mday)               ) ,
+    ( map { calref($year, $mon + $_) } 1 .. $opt_A   )
     );
 
 exit;
