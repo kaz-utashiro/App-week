@@ -54,13 +54,13 @@ Date can given like:
     $ week 9/23        # 9/23 of current year
     $ week 23          # 23rd of current month
 
-Greater number is handled as year.  Next command display calendar of
-year 1752.
+Greater number is handled as year.  Next command displays the calendar of
+the year 1752.
 
     $ week 1752
 
-Use option **-y** to show one year calendar.  Number of years can be
-specified by **-Y** option, and implicitly set **-y** option.
+Use option **-y** to show one year calendar.  The number of years can be
+specified by the **-Y** option, which will implicitly set the **-y** option.
 
     $ week -y          # display this year's calendar
 
