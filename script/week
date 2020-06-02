@@ -96,6 +96,18 @@ option with B<LABEL>=I<colorspec> syntax.  Default color is:
     --colormap  THISWEEK=L05/445 \
     --colormap THISMONTH=555/113
 
+Besides above, color for day-of-week names can be specified
+individually by following labels.  No color is assigned to these
+labels by default.
+
+    DOW_SU
+    DOW_MO
+    DOW_TU
+    DOW_WE
+    DOW_TH
+    DOW_FR
+    DOW_SA
+
 Three digit means 216 RGB values from 000 to 555, and Lxx means 24
 gray scales.  Colormap is handled by L<Getopt::EX::Colormap> module;
 use `perldoc Getopt::EX::Colormap` for detail.
@@ -134,11 +146,24 @@ load appropriate module automatically in default start up module
 
 =item B<-Mteams>
 
-    --team teamname
-
     --tigers, --tigers-rev
     --giants, --giants-rev
     --lions, --lions-rev
+
+=item B<-Molympic>
+
+    --tokyo2020, --tokyo2020-rev
+
+=item B<--theme>
+
+Option B<--theme> is defined in default module, and choose given theme
+option according to the background color of the terminal. If you have
+next setting in your C<~/.weekrc>:
+
+    option --theme tokyo2020
+
+Option B<--tokyo2020> is set for light terminal, and
+B<--tokyo2020-rev> is set for dark terminal.
 
 =back
 
@@ -154,6 +179,8 @@ L<https://github.com/kaz-utashiro/Getopt-EX-termcolor>
 L<Getopt::EX::Colormap>
 
 L<https://qiita.com/kaz-utashiro/items/603f4bca39e397afc91c>
+
+L<https://qiita.com/kaz-utashiro/items/38cb50a4d0cd34b6cce6>
 
 =head1 AUTHOR
 
@@ -202,6 +229,13 @@ my %colormap = (
 	 THISDAYS => "555/113",
 	 THISWEEK => "L05/445",
 	THISMONTH => "555/113",
+	   DOW_SU => "",
+	   DOW_MO => "",
+	   DOW_TU => "",
+	   DOW_WE => "",
+	   DOW_TH => "",
+	   DOW_FR => "",
+	   DOW_SA => "",
     );
 
 my $months = 0;
@@ -303,7 +337,6 @@ elsif ($months > 1) {
 	use integer;
 	$opt_B = ($months - 1) / 2;
 	$opt_A = $months - $opt_B - 1;
-	warn Dumper $opt_B, $opt_A;
     }
 }
 elsif ($opt_year or defined $opt_Y) {
@@ -380,7 +413,7 @@ sub calref {
 	);
 
     $cal[0] = color($label{month}, $cal[0]);
-    $cal[1] = color($label{week}, $cal[1]) if $label{week};
+    $cal[1] = color($label{week}, state $week = week_line($cal[1]));
     map {
 	s/(?= \d\b|\d\d\b)( ?$d\b)/color("THISDAY", $1)/e if $d;
 	$_ = color($label{days}, $_);
@@ -389,10 +422,29 @@ sub calref {
     return \@cal;
 }
 
+use Text::ANSI::Fold;
+
+sub split_week {
+    state $fold = new Text::ANSI::Fold width => [ (1, 2) x 7, 1 ];
+    $fold->text(+shift)->chops;
+}
+
+sub week_line {
+    my $week = shift;
+    my @week = split_week $week;
+    for (0..6) {
+	my $label = "DOW_" . qw(SU MO TU WE TH FR SA)[$_];
+	if (my $color = $colormap{$label}) {
+	    my $indx = $_ * 2 + 1;
+	    $week[$indx] = color($label, $week[$indx]);
+	}
+    }
+    join '', @week;
+}
+
 package App::week::CalYear {
     use Encode;
     use open IO => ':utf8';
-    use Text::ANSI::Fold;
     use Text::VisualWidth::PP qw(vwidth);
     sub TIEARRAY {
 	my $pkg = shift;

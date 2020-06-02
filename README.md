@@ -93,6 +93,18 @@ option with **LABEL**=_colorspec_ syntax.  Default color is:
     --colormap  THISWEEK=L05/445 \
     --colormap THISMONTH=555/113
 
+Besides above, color for day-of-week names can be specified
+individually by following labels.  No color is assigned to these
+labels by default.
+
+    DOW_SU
+    DOW_MO
+    DOW_TU
+    DOW_WE
+    DOW_TH
+    DOW_FR
+    DOW_SA
+
 Three digit means 216 RGB values from 000 to 555, and Lxx means 24
 gray scales.  Colormap is handled by [Getopt::EX::Colormap](https://metacpan.org/pod/Getopt::EX::Colormap) module;
 use \`perldoc Getopt::EX::Colormap\` for detail.
@@ -125,11 +137,24 @@ load appropriate module automatically in default start up module
 
 - **-Mteams**
 
-        --team teamname
-
         --tigers, --tigers-rev
         --giants, --giants-rev
         --lions, --lions-rev
+
+- **-Molympic**
+
+        --tokyo2020, --tokyo2020-rev
+
+- **--theme**
+
+    Option **--theme** is defined in default module, and choose given theme
+    option according to the background color of the terminal. If you have
+    next setting in your `~/.weekrc`:
+
+        option --theme tokyo2020
+
+    Option **--tokyo2020** is set for light terminal, and
+    **--tokyo2020-rev** is set for dark terminal.
 
 Feel free to update these modules and send pull request to github
 site.
@@ -143,6 +168,8 @@ site.
 [Getopt::EX::Colormap](https://metacpan.org/pod/Getopt::EX::Colormap)
 
 [https://qiita.com/kaz-utashiro/items/603f4bca39e397afc91c](https://qiita.com/kaz-utashiro/items/603f4bca39e397afc91c)
+
+[https://qiita.com/kaz-utashiro/items/38cb50a4d0cd34b6cce6](https://qiita.com/kaz-utashiro/items/38cb50a4d0cd34b6cce6)
 
 # AUTHOR
 
