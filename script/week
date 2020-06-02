@@ -473,8 +473,8 @@ package App::week::CalYear {
 	@monthline == 4 or die "cal(1) command format error.\n";
 	state $fields = do {
 	    use Unicode::EastAsianWidth;
-	    my $dow_re = qr/\p{InFullwidth}|[ \w]\w/;
-	    $cal[ $monthline[0] + 1 ] =~ 
+	    my $dow_re = qr/\p{InFullwidth}|[ \S]\S/;
+	    $cal[ $monthline[0] + 1 ] =~
 		m{^   (\s*)
 		      ( (?: $dow_re [ ]){6} $dow_re ) (\s+)
 		      ( (?: $dow_re [ ]){6} $dow_re ) (\s+)
