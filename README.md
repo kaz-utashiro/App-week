@@ -16,18 +16,27 @@ Options:
     -y      Display year calendar.
     -Y[n]   Display n years of calendar
     -c n    Display calendar in n column (default 3).
+    -l      Display I18N options (See below)
+
+    --theme theme
+            Apply color theme
 
 Color options:
 
     --colormap  Specify colormap
     --rgb24     Use 24bit RGB color ANSI sequence
 
-Module options:
+I18N options:
 
-    --mono
-    --lavender
-    --green
-    --pastel
+    -l          Display I18N options
+    --i18n      Enable I18n options
+    --i18n-v    Display with Country/Lange information
+
+Color modules:
+
+    -Mcolors
+    -Mteams
+    -Molympic
 
 # VERSION
 
@@ -67,6 +76,16 @@ specified by the **-Y** option, which will implicitly set the **-y** option.
     $ week -Y2c6       # display 2 years calendar in 6 column
 
     $ week -Y 1752     # display 1752 years of calendar (takes long)
+
+It is possible display calendar in various language by setting `LANG`
+environment.
+
+    LANG=et_EE week
+
+This command is come with **-Mi18n** module which provides easy way to
+specify language by command option.  Option **-l** displays option list
+provided by **-Mi18n** module and option **--i18n** and **--i18n-v**
+enables them.
 
 # COLORMAP
 
@@ -115,11 +134,13 @@ all following arguments here, so that insert this option at the end.
 
     option default $<move> --cm 'THISDAY=+F'
 
-# FILES
+# I18N
 
-- `~/.weekrc`
+- **--i18n**
+- **--i18n-v**
 
-    Start up file.
+    Both of these enables I18N options and Country/Language information
+    will be show if used **--i18n-v**.
 
 # MODULES
 
@@ -158,6 +179,14 @@ load appropriate module automatically in default start up module
 
 Feel free to update these modules and send pull request to github
 site.
+
+# FILES
+
+- `~/.weekrc`
+
+    Start up file.  Use like this:
+
+        option default --i18n-v --theme tokyo2020
 
 # SEE ALSO
 

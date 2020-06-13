@@ -19,18 +19,27 @@ Options:
     -y      Display year calendar.
     -Y[n]   Display n years of calendar
     -c n    Display calendar in n column (default 3).
+    -l      Display I18N options (See below)
+
+    --theme theme
+            Apply color theme
 
 Color options:
 
     --colormap  Specify colormap
     --rgb24     Use 24bit RGB color ANSI sequence
 
-Module options:
+I18N options:
 
-    --mono
-    --lavender
-    --green
-    --pastel
+    -l          Display I18N options
+    --i18n      Enable I18n options
+    --i18n-v    Display with Country/Lange information
+
+Color modules:
+
+    -Mcolors
+    -Mteams
+    -Molympic
 
 =head1 VERSION
 
@@ -70,6 +79,16 @@ specified by the B<-Y> option, which will implicitly set the B<-y> option.
     $ week -Y2c6       # display 2 years calendar in 6 column
 
     $ week -Y 1752     # display 1752 years of calendar (takes long)
+
+It is possible display calendar in various language by setting C<LANG>
+environment.
+
+    LANG=et_EE week
+
+This command is come with B<-Mi18n> module which provides easy way to
+specify language by command option.  Option B<-l> displays option list
+provided by B<-Mi18n> module and option B<--i18n> and B<--i18n-v>
+enables them.
 
 =head1 COLORMAP
 
@@ -118,13 +137,16 @@ all following arguments here, so that insert this option at the end.
 
     option default $<move> --cm 'THISDAY=+F'
 
-=head1 FILES
+=head1 I18N
 
 =over 4
 
-=item F<~/.weekrc>
+=item B<--i18n>
 
-Start up file.
+=item B<--i18n-v>
+
+Both of these enables I18N options and Country/Language information
+will be show if used B<--i18n-v>.
 
 =back
 
@@ -169,6 +191,18 @@ B<--tokyo2020-rev> is set for dark terminal.
 
 Feel free to update these modules and send pull request to github
 site.
+
+=head1 FILES
+
+=over 4
+
+=item F<~/.weekrc>
+
+Start up file.  Use like this:
+
+    option default --i18n-v --theme tokyo2020
+
+=back
 
 =head1 SEE ALSO
 

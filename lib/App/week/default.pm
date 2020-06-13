@@ -12,7 +12,15 @@ autoload -Mteams \
 	--lions --lions-rev --lions2 --lions2-rev --lions3 --lions3-rev
 
 autoload -Molympic \
-	--tokyo2020 --tokyo2020-rev
+	--olympic-dow --olympic-dow-rev \
+	--tokyo2020 --tokyo2020-rev \
+	--tokyo2020-gold --tokyo2020-gold-rev \
+	--gold-frame
 
 option --themecolor::bg -Mtermcolor::bg(light=--$<shift>,dark=--$<shift>-rev)
 option --theme --themecolor::bg $<copy(0,1)>
+
+option --i18n   -Mi18n::setopt(dash=0,long=0,listopt=-l)
+option --i18n-v -Mi18n::setopt(dash=0,long=0,verbose,listopt=-l)
+
+autoload --i18n -l
