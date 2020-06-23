@@ -68,7 +68,7 @@
          "web" : "https://github.com/kaz-utashiro/App-week"
       }
    },
-   "version" : "0.10",
+   "version" : "0.11",
    "x_authority" : "cpan:UTASHIRO",
    "x_contributors" : [
       "Shlomi Fish <shlomif@shlomifish.org>"
