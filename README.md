@@ -30,7 +30,7 @@ I18N options:
 
     -l          Display I18N options
     --i18n      Enable I18n options
-    --i18n-v    Display with Country/Lange information
+    --i18n-v    Display with Territory/Lange information
 
 Color modules:
 
@@ -40,7 +40,7 @@ Color modules:
 
 # VERSION
 
-Version 0.11
+Version 0.12
 
 # DESCRIPTION
 
@@ -139,8 +139,8 @@ all following arguments here, so that insert this option at the end.
 - **--i18n**
 - **--i18n-v**
 
-    Both of these enables I18N options and Country/Language information
-    will be show if used **--i18n-v**.
+    Both of these enables I18N options and Territory/Language information
+    will be shown if used **--i18n-v**.
 
 # MODULES
 

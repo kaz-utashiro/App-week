@@ -2,6 +2,10 @@ Revision history for Perl extension App-week
 
 {{$NEXT}}
 
+0.12 2020-06-24T14:22:32Z
+
+    - Add default parameter to --theme option.
+
 0.11 2020-06-22T23:59:48Z
 
     - Introduce --i18n option.

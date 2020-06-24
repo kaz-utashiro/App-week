@@ -17,7 +17,7 @@ autoload -Molympic \
 	--tokyo2020-gold --tokyo2020-gold-rev \
 	--gold-frame
 
-option --themecolor::bg -Mtermcolor::bg(light=--$<shift>,dark=--$<shift>-rev)
+option --themecolor::bg -Mtermcolor::bg(default=100,light=--$<shift>,dark=--$<shift>-rev)
 option --theme --themecolor::bg $<copy(0,1)>
 
 option --i18n   -Mi18n::setopt(dash=0,long=0,listopt=-l)
