@@ -42,7 +42,7 @@
       },
       "runtime" : {
          "requires" : {
-            "Getopt::EX" : "v1.18.0",
+            "Getopt::EX" : "v1.19.0",
             "Getopt::EX::i18n" : "0.08",
             "Getopt::EX::termcolor" : "1.06",
             "Text::ANSI::Fold" : "1.03",
@@ -68,7 +68,7 @@
          "web" : "https://github.com/kaz-utashiro/App-week"
       }
    },
-   "version" : "0.12",
+   "version" : "0.13",
    "x_authority" : "cpan:UTASHIRO",
    "x_contributors" : [
       "Shlomi Fish <shlomif@shlomifish.org>"

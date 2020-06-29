@@ -40,7 +40,7 @@ Color modules:
 
 # VERSION
 
-Version 0.12
+Version 0.13
 
 # DESCRIPTION
 
@@ -194,11 +194,15 @@ site.
 
 [https://github.com/kaz-utashiro/Getopt-EX-termcolor](https://github.com/kaz-utashiro/Getopt-EX-termcolor)
 
+[https://github.com/kaz-utashiro/Getopt-EX-i18n](https://github.com/kaz-utashiro/Getopt-EX-i18n)
+
 [Getopt::EX::Colormap](https://metacpan.org/pod/Getopt::EX::Colormap)
 
 [https://qiita.com/kaz-utashiro/items/603f4bca39e397afc91c](https://qiita.com/kaz-utashiro/items/603f4bca39e397afc91c)
 
 [https://qiita.com/kaz-utashiro/items/38cb50a4d0cd34b6cce6](https://qiita.com/kaz-utashiro/items/38cb50a4d0cd34b6cce6)
+
+[https://qiita.com/kaz-utashiro/items/be37a4d703f9d2208ed1](https://qiita.com/kaz-utashiro/items/be37a4d703f9d2208ed1)
 
 # AUTHOR
 

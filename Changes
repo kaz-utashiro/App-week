@@ -2,6 +2,10 @@ Revision history for Perl extension App-week
 
 {{$NEXT}}
 
+0.13 2020-06-29T02:23:37Z
+
+    - requires 'Getopt::EX', 'v1.19.0';
+
 0.12 2020-06-24T14:22:32Z
 
     - Add default parameter to --theme option.
