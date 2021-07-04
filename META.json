@@ -43,7 +43,7 @@
       "runtime" : {
          "requires" : {
             "Getopt::EX" : "v1.23.3",
-            "Getopt::EX::i18n" : "0.08",
+            "Getopt::EX::i18n" : "0.09",
             "Getopt::EX::termcolor" : "1.06",
             "Text::ANSI::Fold" : "2.10",
             "Text::VisualWidth::PP" : "0.05",
