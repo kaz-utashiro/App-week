@@ -2,9 +2,10 @@ package App::week::CalYear;
 
 use v5.14;
 use warnings;
+use utf8;
 
 use Exporter 'import';
-our @EXPORT = qw(@calyear);
+our @EXPORT_OK = qw(@calyear);
 
 use Encode;
 use Data::Dumper;
@@ -23,19 +24,28 @@ sub FETCH {
     $obj->{$year} //= [ CalYear($year) ];
 }
 
-my $caller = caller;
+use Date::Japanese::Era;
+
+my %config = (
+    netbsd    => undef,
+    crashspae => undef,
+    show_year => [ 1 ],
+    wareki    => undef,
+);
+
+sub Configure {
+    for (my($k, $v) = splice(@_, 0, 2)) {
+	$config{$k} = $v;
+    }
+}
 
 sub CalYear {
     my $year = sprintf "%4d", shift;
     my $cal = `cal $year` =~ s/_[\b]//gr;
-    state $debug = do {
-	no strict 'refs';
-	\%{"$caller\::debug"};
-    };
-    if ($debug->{crashspace}) {
+    if ($config{crashspace}) {
 	$cal =~ s/ +$//mg;
     }
-    if ($debug->{netbsd}) {
+    if ($config{netbsd}) {
 	$cal =~ s/(Su|Mo|We|Fr|Sa)/' ' . substr($1,0,1)/mge;
     }
     my @cal = split /\n/, $cal, -1;
@@ -85,8 +95,25 @@ sub CalYear {
 	    }
 	}
     }
-    $month[1][0] =~ s/(?<=^ ) {4}| {4}(?= $)/$year/g;
+    my $wareki = $config{wareki} // $month[1][1] =~ /火/;
+    for my $month (@{$config{show_year}}) {
+	next unless 1 <= $month and $month <= 12;
+	insert_year(\$month[$month][0], $year, $month, $wareki);
+    }
     @month;
+}
+
+sub insert_year {
+    local *_ = shift;
+    my($year, $month, $wareki) = @_;
+    my $len = length($year);
+    s/^ \K[ ]{$len}/$year/;
+    if (1873 <= $year and $wareki) {
+	my $era = Date::Japanese::Era->new($year, $month, 1);
+	$year = sprintf '%s%d', $era->name, $era->year;
+	$len = vwidth $year;
+    }
+    s/ {$len}(?=[ ]$)/$year/;
 }
 
 1;

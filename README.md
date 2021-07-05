@@ -17,6 +17,8 @@ Options:
     -Y[n]   Display n years of calendar
     -c n    Display calendar in n column (default 3).
     -l      Display I18N options (See below)
+    -s[n]   Display year on month-n (default current)
+    -S      Display year on all months
 
     --theme theme
             Apply color theme
@@ -87,9 +89,15 @@ specify language by command option.  Option **-l** displays option list
 provided by **-Mi18n** module and option **--i18n** and **--i18n-v**
 enables them.
 
+# JAPANESE ERA
+
+By default, year is shown on every January calendar.  When used in
+Japanese locale environment, right side year is displayed in Japanese
+era (wareki: 和暦) format.
+
 # COLORMAP
 
-Each field is labled by names.
+Each field is labeled by names.
 
     FRAME       Enclosing frame
     MONTH       Month name

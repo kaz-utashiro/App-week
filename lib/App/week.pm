@@ -12,6 +12,8 @@ use List::Util qw(max);
 use Pod::Usage;
 use Data::Dumper;
 
+use App::week::CalYear qw(@calyear);
+
 use open IO => ':utf8', ':std';
 
 sub new {
@@ -60,7 +62,6 @@ my $opt_year;
 my $opt_Y;
 my $opt_usage;
 my $opt_rgb24;
-our %debug;
 
 my %month = do {
     my $i;
@@ -78,7 +79,17 @@ my @optargs = (
     "colordump"     => \$opt_colordump,
     "rgb24!"        => \$opt_rgb24,
     "usage:s"       => \$opt_usage,
-    "debug=s"       => \%debug,
+    "config=s%"     => sub {
+	shift;
+	App::week::CalYear::Configure(@_);
+    },
+    "year-on-all|S"   => sub {
+	App::week::CalYear::Configure(show_year => [ 1..12 ]);
+    },
+    "year-on|s:i"   => sub {
+	App::week::CalYear::Configure(
+	    show_year => [ $_[1] < 0 ? (1..12) : $_[1] || $mon ]);
+    },
     "<>" => sub {
 	local $_ = $_[0];
 	if (/^-+([0-9]+)$/) {
@@ -204,8 +215,6 @@ sub calendar {
     }
     and print "\n";
 }
-
-use App::week::CalYear qw(@calyear);
 
 sub calref {
     my($y, $m, $d) = @_;
