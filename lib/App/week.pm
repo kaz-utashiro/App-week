@@ -13,21 +13,10 @@ use List::MoreUtils qw(zip);
 use Hash::Util qw(lock_keys);
 use Pod::Usage;
 use Data::Dumper;
+use open IO => ':utf8', ':std';
+use Getopt::EX::Colormap;
 
 use App::week::CalYear qw(@calyear);
-
-use open IO => ':utf8', ':std';
-
-my($sec, $min, $hour, $mday, $mon, $year) = CORE::localtime(time);
-$mon++;
-$year += 1900;
-my $months = 0;
-
-my @month_name = qw(JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC);
-my %month = zip @month_name, @{[1..12]};
-my $month_re = do { local $" = '|'; qr/(?:@month_name)/i };
-
-use Getopt::EX::Colormap;
 
 my %DEFAULT_COLORMAP = (
     (),      DAYS => "L05/335",
@@ -49,9 +38,23 @@ my %DEFAULT_COLORMAP = (
 
 sub new {
     my $class = shift;
+
+    my($sec, $min, $hour, $mday, $mon, $year) = CORE::localtime(time);
+    $mon++;
+    $year += 1900;
+
+    my @month_name = qw(JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC);
+    my %month = zip @month_name, @{[1..12]};
+    my $month_re = do { local $" = '|'; qr/(?:@month_name)/i };
+
     my %obj;
     my $obj = bless \%obj, $class;
     %obj = (
+	months      => 0,
+	year        => $year,
+	mday        => $mday,
+	mon         => $mon,
+
 	after       => undef,
 	before      => 1,
 	context     => sub {
@@ -69,21 +72,21 @@ sub new {
 	"<>"        => sub {
 	    local $_ = $_[0];
 	    if (/^-+([0-9]+)$/) {
-		$months = $1;
+		$obj->{months} = $1;
 	    }
 	    elsif (/^($month_re)/) {
-		$mon = $month{uc($1)};
+		$obj->{mon} = $month{uc($1)};
 	    }
 	    elsif (/^-/) {
 		die "@_: Unknown option\n";
 	    }
 	    else {
-		$mday = $1 if s/\/*(\d+)$//;
-		$mon  = $1 if s/\/*(\d+)$//;
-		$year = $1 if m/(\d+)$/;
-		if ($mday > 31) {
-		    $year = $mday;
-		    undef $mday;
+		$obj->{mday} = $1 if s/\/*(\d+)$//;
+		$obj->{mon}  = $1 if s/\/*(\d+)$//;
+		$obj->{year} = $1 if m/(\d+)$/;
+		if ($obj->{mday} > 31) {
+		    $obj->{year} = $obj->{mday};
+		    undef $obj->{mday};
 		    $obj->{show_year}++;
 		}
 	    }
@@ -139,6 +142,7 @@ sub run {
 
     $obj->initialize();
 
+    my($year, $mon, $mday) = @{$obj}{qw(year mon mday)};
     $obj->calendar(
 	( map { $obj->calref($year, $mon + $_) } -$obj->{before} .. -1 ) ,
 	(       $obj->calref($year, $mon, $mday)               ) ,
@@ -171,38 +175,38 @@ sub initialize {
     }
     elsif (defined (my $m = $obj->{year_on})) {
 	App::week::CalYear::Configure(
-	    show_year => [ $m < 0 ? (1..12) : $m || $mon ]);
+	    show_year => [ $m < 0 ? (1..12) : $m || $obj->{mon} ]);
     }
 	
-    if ($months == 1) {
+    if ($obj->{months} == 1) {
 	$obj->{before} = $obj->{after} = 0;
     }
-    elsif ($months > 1) {
+    elsif ($obj->{months} > 1) {
 	if (defined $obj->{before}) {
-	    $obj->{after} = $months - $obj->{before} - 1;
+	    $obj->{after} = $obj->{months} - $obj->{before} - 1;
 	} elsif (defined $obj->{after}) {
-	    $obj->{before} = $months - $obj->{after} - 1;
+	    $obj->{before} = $obj->{months} - $obj->{after} - 1;
 	} else {
 	    use integer;
-	    $obj->{before} = ($months - 1) / 2;
-	    $obj->{after} = $months - $obj->{before} - 1;
+	    $obj->{before} = ($obj->{months} - 1) / 2;
+	    $obj->{after} = $obj->{months} - $obj->{before} - 1;
 	}
     }
     elsif ($obj->{show_year} or defined $obj->{years}) {
-	$months = 12 * ($obj->{years} // 1);
-	$obj->{before} = $mon - 1;
-	$obj->{after} = $months - $mon;
+	$obj->{months} = 12 * ($obj->{years} // 1);
+	$obj->{before} = $obj->{mon} - 1;
+	$obj->{after} = $obj->{months} - $obj->{mon};
     }
     else {
 	$obj->{before} //= 1;
 	$obj->{after} //= max(0, $obj->{column} - $obj->{before} - 1);
-	$months = $obj->{before} + $obj->{after} + 1;
+	$obj->{months} = $obj->{before} + $obj->{after} + 1;
     }
 
     $obj->{before} //= 1;
     $obj->{after} //= 1;
 
-    $year += $year < 50 ? 2000 : $year < 100 ? 1900 : 0;
+    $obj->{year} += $obj->{year} < 50 ? 2000 : $obj->{year} < 100 ? 1900 : 0;
 }
 
 ######################################################################
