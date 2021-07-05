@@ -9,6 +9,8 @@ use App::week::Util;
 use utf8;
 use Time::localtime;
 use List::Util qw(max);
+use List::MoreUtils qw(zip);
+use Hash::Util qw(lock_keys);
 use Pod::Usage;
 use Data::Dumper;
 
@@ -16,102 +18,105 @@ use App::week::CalYear qw(@calyear);
 
 use open IO => ':utf8', ':std';
 
-sub new {
-    my $class = shift;
-    my $obj = bless {}, $class;
-}
-
 my($sec, $min, $hour, $mday, $mon, $year) = CORE::localtime(time);
 $mon++;
 $year += 1900;
+my $months = 0;
 
-my %colormap = (
-	     DAYS => "L05/335",
-	     WEEK => "L05/445",
-	    FRAME => "L05/445",
-	    MONTH => "L05/335",
-	  THISDAY => "522/113",
-	 THISDAYS => "555/113",
-	 THISWEEK => "L05/445",
-	THISMONTH => "555/113",
-	   DOW_SU => "",
-	   DOW_MO => "",
-	   DOW_TU => "",
-	   DOW_WE => "",
-	   DOW_TH => "",
-	   DOW_FR => "",
-	   DOW_SA => "",
-    );
+my @month_name = qw(JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC);
+my %month = zip @month_name, @{[1..12]};
+my $month_re = do { local $" = '|'; qr/(?:@month_name)/i };
 
 use Getopt::EX::Colormap;
-my $colormap = Getopt::EX::Colormap
-    ->new(HASH => \%colormap);
 
-sub color {
-    $colormap->color(@_);
+my %DEFAULT_COLORMAP = (
+    (),      DAYS => "L05/335",
+    (),      WEEK => "L05/445",
+    (),     FRAME => "L05/445",
+    (),     MONTH => "L05/335",
+    (),   THISDAY => "522/113",
+    (),  THISDAYS => "555/113",
+    (),  THISWEEK => "L05/445",
+    (), THISMONTH => "555/113",
+    (),    DOW_SU => "",
+    (),    DOW_MO => "",
+    (),    DOW_TU => "",
+    (),    DOW_WE => "",
+    (),    DOW_TH => "",
+    (),    DOW_FR => "",
+    (),    DOW_SA => "",
+    );
+
+sub new {
+    my $class = shift;
+    my %obj;
+    my $obj = bless \%obj, $class;
+    %obj = (
+	after       => undef,
+	before      => 1,
+	context     => sub {
+	    $obj->{after} = $obj->{before} = $_[1];
+	},
+	column      => 3,
+	colordump   => undef,
+	colormap    => [],
+	show_year   => undef,
+	years       => undef,
+	usage       => undef,
+	rgb24       => undef,
+	year_on_all => undef,
+	year_on     => undef,
+	"<>"        => sub {
+	    local $_ = $_[0];
+	    if (/^-+([0-9]+)$/) {
+		$months = $1;
+	    }
+	    elsif (/^($month_re)/) {
+		$mon = $month{uc($1)};
+	    }
+	    elsif (/^-/) {
+		die "@_: Unknown option\n";
+	    }
+	    else {
+		$mday = $1 if s/\/*(\d+)$//;
+		$mon  = $1 if s/\/*(\d+)$//;
+		$year = $1 if m/(\d+)$/;
+		if ($mday > 31) {
+		    $year = $mday;
+		    undef $mday;
+		    $obj->{show_year}++;
+		}
+	    }
+	},
+	COLORMAP => { %DEFAULT_COLORMAP },
+	);
+
+    $obj->{CM} = Getopt::EX::Colormap
+	->new(HASH => $obj->{COLORMAP});
+    
+    lock_keys %{$obj};
+    $obj;
 }
 
-my $months = 0;
-my $opt_A;
-my $opt_B = 1;
-my $opt_C;
-my $opt_column = 3;
-my $opt_colordump;
-my @opt_colormap;
-my $opt_year;
-my $opt_Y;
-my $opt_usage;
-my $opt_rgb24;
-
-my %month = do {
-    my $i;
-    map { $_ => ++$i } qw(JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC)
-};
+sub colormap { (+shift)->{COLORMAP} }
+sub colorobj { (+shift)->{CM} }
+sub color    { (+shift)->colorobj->color(@_) }
 
 my @optargs = (
-    "after|A:1"     => \$opt_A,
-    "before|B:1"    => \$opt_B,
-    "C:4"           => sub { $opt_A = $opt_B = $_[1] },
-    "year|y"        => \$opt_year,
-    "Y:1"           => \$opt_Y,
-    "column|c=n"    => \$opt_column,
-    "colormap|cm=s" => \@opt_colormap,
-    "colordump"     => \$opt_colordump,
-    "rgb24!"        => \$opt_rgb24,
-    "usage:s"       => \$opt_usage,
-    "config=s%"     => sub {
-	shift;
-	App::week::CalYear::Configure(@_);
-    },
-    "year-on-all|S"   => sub {
-	App::week::CalYear::Configure(show_year => [ 1..12 ]);
-    },
-    "year-on|s:i"   => sub {
-	App::week::CalYear::Configure(
-	    show_year => [ $_[1] < 0 ? (1..12) : $_[1] || $mon ]);
-    },
-    "<>" => sub {
-	local $_ = $_[0];
-	if (/^-+([0-9]+)$/) {
-	    $months = $1;
-	}
-	elsif (/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/i) {
-	    $mon = $month{uc($1)}
-	}
-	elsif (/^-/) {
-	    die "@_: Unknown option\n";
-	}
-	else {
-	    $mday = $1 if s/\/*(\d+)$//;
-	    $mon  = $1 if s/\/*(\d+)$//;
-	    $year = $1 if m/(\d+)$/;
-	    if ($mday > 31) {
-		$year = $mday;
-		undef $mday;
-		$opt_year++;
-	    }
-	}
-    },
+    "after|A:1",
+    "before|B:1",
+    "context|C:4",
+    "show_year|y",
+    "years|Y:1",
+    "column|c=n",
+    "colormap|cm=s@",
+    "colordump",
+    "rgb24!",
+    "usage:s",
+    "config=s%",
+    "year_on_all|S",
+    "year_on|s:i",
+    "<>",
     );
 
 sub usage {
@@ -130,65 +135,81 @@ sub run {
     use Getopt::EX::Long qw(:DEFAULT Configure ExConfigure);
     ExConfigure BASECLASS => [ "App::week", "Getopt::EX", "" ];
     Configure qw(bundling no_getopt_compat no_ignore_case pass_through);
-    GetOptions(@optargs) || usage({status => 1});
+    GetOptions($obj, @optargs) || usage({status => 1});
 
-    $colormap->load_params(@opt_colormap);
+    $obj->initialize();
 
-    if (defined $opt_rgb24) {
+    $obj->calendar(
+	( map { $obj->calref($year, $mon + $_) } -$obj->{before} .. -1 ) ,
+	(       $obj->calref($year, $mon, $mday)               ) ,
+	( map { $obj->calref($year, $mon + $_) } 1 .. $obj->{after}   )
+	);
+
+    return 0;
+}
+
+sub initialize {
+    my $obj = shift;
+
+    my $colormap = $obj->colorobj;
+    $colormap->load_params(@{$obj->{colormap}});
+
+    if (defined $obj->{rgb24}) {
 	no warnings 'once';
-	$Getopt::EX::Colormap::RGB24 = $opt_rgb24;
+	$Getopt::EX::Colormap::RGB24 = $obj->{rgb24};
     }
 
-    if ($opt_colordump) {
+    if ($obj->{colordump}) {
 	print $colormap->colormap(
 	    name   => '--changeme',
 	    option => '--colormap');
 	exit;
     }
 
+    if ($obj->{year_on_all}) {
+	App::week::CalYear::Configure(show_year => [ 1..12 ]);
+    }
+    elsif (defined (my $m = $obj->{year_on})) {
+	App::week::CalYear::Configure(
+	    show_year => [ $m < 0 ? (1..12) : $m || $mon ]);
+    }
+	
     if ($months == 1) {
-	$opt_B = $opt_A = 0;
+	$obj->{before} = $obj->{after} = 0;
     }
     elsif ($months > 1) {
-	if (defined $opt_B) {
-	    $opt_A = $months - $opt_B - 1;
-	} elsif (defined $opt_A) {
-	    $opt_B = $months - $opt_A - 1;
+	if (defined $obj->{before}) {
+	    $obj->{after} = $months - $obj->{before} - 1;
+	} elsif (defined $obj->{after}) {
+	    $obj->{before} = $months - $obj->{after} - 1;
 	} else {
 	    use integer;
-	    $opt_B = ($months - 1) / 2;
-	    $opt_A = $months - $opt_B - 1;
+	    $obj->{before} = ($months - 1) / 2;
+	    $obj->{after} = $months - $obj->{before} - 1;
 	}
     }
-    elsif ($opt_year or defined $opt_Y) {
-	$months = 12 * ($opt_Y // 1);
-	$opt_B = $mon - 1;
-	$opt_A = $months - $mon;
+    elsif ($obj->{show_year} or defined $obj->{years}) {
+	$months = 12 * ($obj->{years} // 1);
+	$obj->{before} = $mon - 1;
+	$obj->{after} = $months - $mon;
     }
     else {
-	$opt_B //= 1;
-	$opt_A //= max(0, $opt_column - $opt_B - 1);
-	$months = $opt_B + $opt_A + 1;
+	$obj->{before} //= 1;
+	$obj->{after} //= max(0, $obj->{column} - $obj->{before} - 1);
+	$months = $obj->{before} + $obj->{after} + 1;
     }
 
-    $opt_B //= 1;
-    $opt_A //= 1;
+    $obj->{before} //= 1;
+    $obj->{after} //= 1;
 
     $year += $year < 50 ? 2000 : $year < 100 ? 1900 : 0;
-
-    calendar(
-	( map { calref($year, $mon + $_) } -$opt_B .. -1 ) ,
-	(       calref($year, $mon, $mday)               ) ,
-	( map { calref($year, $mon + $_) } 1 .. $opt_A   )
-	);
-
-    return 0;
 }
 
 ######################################################################
 
 sub calendar {
-    my $cols = $opt_column;
+    my $obj = shift;
+    my $cols = $obj->{column};
     my $row = 0;
     my @refs;
     my $cal_width = 24;
@@ -198,7 +219,7 @@ sub calendar {
 	@refs = splice @_, 0, $cols;
 	do {
 	    my $n = $row++ ? $cols : @refs;
-	    print color(FRAME => join('', ' ', ($hr1) x $n, ' '));
+	    print $obj->color(FRAME => join('', ' ', ($hr1) x $n, ' '));
 	}
 	and print "\n";
 	for (my $i = 0; 1; $i++) {
@@ -207,16 +228,17 @@ sub calendar {
 		push @cols, $$ref[$i];
 	    }
 	    last if !grep(defined, @cols);
-	    print join(color(FRAME => $gap), '', @cols, ''), "\n";
+	    print join($obj->color(FRAME => $gap), '', @cols, ''), "\n";
 	}
     }
     do {
-	print color(FRAME => join('', ' ', ($hr1) x @refs, ' '));
+	print $obj->color(FRAME => join('', ' ', ($hr1) x @refs, ' '));
     }
     and print "\n";
 }
 
 sub calref {
+    my $obj = shift;
     my($y, $m, $d) = @_;
 
     while ($m > 12) { $y += 1; $m -= 12 }
@@ -230,24 +252,25 @@ sub calref {
 	days  => $d ? "THISDAYS"  : "DAYS",
 	);
 
-    $cal[0] = color($label{month}, $cal[0]);
-    $cal[1] = color($label{week}, state $week = week_line($cal[1]));
+    $cal[0] = $obj->color($label{month}, $cal[0]);
+    $cal[1] = $obj->color($label{week}, state $week = $obj->week_line($cal[1]));
     map {
-	s/(?= \d\b|\d\d\b)( ?$d\b)/color("THISDAY", $1)/e if $d;
-	$_ = color($label{days}, $_);
+	s/(?= \d\b|\d\d\b)( ?$d\b)/$obj->color("THISDAY", $1)/e if $d;
+	$_ = $obj->color($label{days}, $_);
     } @cal[2..$#cal];
 
     return \@cal;
 }
 
 sub week_line {
+    my $obj = shift;
     my $week = shift;
     my @week = split_week $week;
     for (0..6) {
 	my $label = "DOW_" . qw(SU MO TU WE TH FR SA)[$_];
-	if (my $color = $colormap{$label}) {
+	if (my $color = $obj->colormap->{$label}) {
 	    my $indx = $_ * 2 + 1;
-	    $week[$indx] = color($label, $week[$indx]);
+	    $week[$indx] = $obj->color($label, $week[$indx]);
 	}
     }
     join '', @week;

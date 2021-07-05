@@ -1,5 +1,8 @@
 requires 'perl', '5.014';
 
+requires 'List::Util', '1.45';
+requires 'List::MoreUtils';
+requires 'Hash::Util';
 requires 'Getopt::EX', 'v1.23.3';
 requires 'Getopt::EX::termcolor', '1.06';
 requires 'Getopt::EX::i18n', '0.09';
