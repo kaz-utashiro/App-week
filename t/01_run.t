@@ -64,7 +64,7 @@ SKIP: {
 	warn $_;
     }
 
-    my $week = Script->new([qw(--cm *= -C0 1752/9/2)])->run;
+    my $week = Script->new([qw(--cm *= -C0p0 1752/9/2)])->run;
     compare $week->result, $result{"175209_re"}, "1752/9/2";
 }
 
