@@ -52,17 +52,25 @@ sub new {
     my %obj;
     my $obj = bless \%obj, $class;
     %obj = (
+
+	# internal use
 	months      => 0,
 	year        => $year,
 	mday        => $mday,
 	mon         => $mon,
-	cell_width  => 24,
-	h_gap       => '  ',
 
+	cell_width => 22,
+	frame => '  ',
+	frame_height => 1,
+
+	COLORMAP => \%colormap,
+	CM => Getopt::EX::Colormap->new(HASH => \%colormap),
+
+	# option params
 	help        => undef,
 	after       => undef,
 	before      => 1,
-	context     => sub {
+	center      => sub {
 	    $obj->{after} = $obj->{before} = $_[1];
 	},
 	column      => 3,
@@ -92,8 +100,6 @@ sub new {
 			       @{$obj}{qw(year mon mday show_year)});
 	    }
 	},
-	COLORMAP => \%colormap,
-	CM => Getopt::EX::Colormap->new(HASH => \%colormap),
 	);
 
     lock_keys %{$obj};
@@ -104,23 +110,28 @@ sub colormap { (+shift)->{COLORMAP} }
 sub colorobj { (+shift)->{CM} }
 sub color    { (+shift)->colorobj->color(@_) }
 
-my @optargs = (
-    "help|h",
-    "after|A:1",
-    "before|B:1",
-    "context|C:4",
-    "show_year|y",
-    "years|Y:1",
-    "column|c=n",
-    "colormap|cm=s@",
-    "colordump",
-    "rgb24!",
-    "usage:s",
-    "config=s%",
-    "year_on_all|P",
-    "year_on|p=i",
-    "<>",
-    );
+my @optargs = make_options << "END";
+
+    # undocumened yet
+    config           =s%
+    frame        | F =s
+    frame_height | H =i
+
+    help         | h
+    after        | A :1
+    before       | B :1
+    center       | C :4
+    show_year    | y
+    years        | Y :1
+    column       | c =n
+    colormap|cm      =s@
+    colordump
+    rgb24            !
+    usage            :s
+    year_on_all  | P
+    year_on      | p =i
+    <>
+END
 
 sub usage {
     pod2usage(-verbose => 0, -exitval => "NOEXIT");
@@ -203,10 +214,16 @@ sub initialize {
     #
     # calculate output form
     #
-    my @param = qw(years months before after year mon column);
-    @{$app}{@param} = setup(@{$app}{@param});
+    $app->apply(\&setup,
+		qw(years months before after year mon column));
 
     $app->{year} += $app->{year} < 50 ? 2000 : $app->{year} < 100 ? 1900 : 0;
+}
+
+sub apply (&$@) {
+    my $app = shift;
+    my $sub = shift;
+    @{$app}{@_} = $sub->(@{$app}{@_});
 }
 
 sub setup {
@@ -248,13 +265,13 @@ sub setup {
 sub display {
     my $obj = shift;
     @_ or return;
-    print $obj->h_rule(min($obj->{column}, int @_)), "\n";
+    print $obj->h_rule(min($obj->{column}, int @_));
     while (@_) {
-	my @cells = splice @_, 0, $obj->{column};
-	for my $row (transpose @cells) {
-	    print $obj->h_line(@{$row}), "\n";
+	my @cell = splice @_, 0, $obj->{column};
+	for my $row (transpose @cell) {
+	    print $obj->h_line(@{$row});
 	}
-	print $obj->h_rule(int @cells), "\n";
+	print $obj->h_rule(int @cell);
     }
 }
 
@@ -262,13 +279,15 @@ sub h_rule {
     my $obj = shift;
     my $column = shift;
     state $hr1 = " " x $obj->{cell_width};
-    $obj->color(FRAME => join('', ' ', ($hr1) x $column, ' '));
+    my $s = join($obj->{frame}, '', ($hr1) x $column, '');
+    my $rule = $obj->color(FRAME => $s) . "\n";
+    $rule x $obj->{frame_height};
 }
 
 sub h_line {
     my $obj = shift;
-    state $gap = $obj->color(FRAME => $obj->{h_gap});
-    join $gap, '', @_, '';
+    state $frame = $obj->color(FRAME => $obj->{frame});
+    join($frame, '', @_, '') . "\n";
 }
 
 sub cell {

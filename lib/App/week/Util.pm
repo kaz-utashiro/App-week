@@ -8,6 +8,22 @@ use Text::ANSI::Fold;
 use Date::Japanese::Era;
 use List::Util qw(pairmap);
 
+sub make_options {
+    map {
+	# "foo_bar" -> "foo_bar|foo-bar|foobar"
+	s{^(?=\w+_)(\w+)\K}{
+	    "|" . $1 =~ tr[_][-]r . "|" . $1 =~ tr[_][]dr
+	}er;
+    }
+    grep {
+	s/#.*//;
+	s/\s+//g;
+	/\S/;
+    }
+    map { split /\n+/ }
+    @_;
+}
+
 my %abbr = do {
     pairmap {
 	( $a => $b, substr($b, 0, 1) => $b )
