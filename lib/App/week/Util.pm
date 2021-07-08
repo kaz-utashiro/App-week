@@ -90,4 +90,11 @@ sub transpose {
     @x;
 }
 
+sub decode_argv {
+    map {
+	utf8::is_utf8($_) ? $_ : decode('utf8', $_);
+    }
+    @_;
+}
+
 1;
