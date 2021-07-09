@@ -34,7 +34,9 @@ my %abbr = do {
 
 sub guess_date {
     my $date_str = local $_ = shift;
-    my($year, $mon, $mday, $show_year) = @_;
+    my @args = \(
+	my($year, $mon, $mday, $show_year) = @_
+    );
 
     if (m{
 	^
@@ -73,7 +75,7 @@ sub guess_date {
 	die "$date_str: format error" if length;
     }
 
-    ($year, $mon, $mday, $show_year);
+    map ${$_}, @args;
 }
 
 sub split_week {
@@ -99,6 +101,14 @@ sub decode_argv {
 
 sub apply {
     my($sub, $hash, @keys) = @_;
+    @{$hash}{@keys} = $sub->(@{$hash}{@keys});
+}
+
+sub call {
+    my($sub, %opt) = @_;
+    my $hash = $opt{for} or die;
+    my $with = $opt{with} // [];
+    my @keys = ref $with eq 'ARRAY' ? @{$with} : $with;
     @{$hash}{@keys} = $sub->(@{$hash}{@keys});
 }
 

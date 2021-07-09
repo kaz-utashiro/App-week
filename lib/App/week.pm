@@ -38,6 +38,7 @@ my %DEFAULT_COLORMAP = (
 
 sub new {
     my $class = shift;
+    my $obj = bless {}, $class;
 
     my($sec, $min, $hour, $mday, $mon, $year) = CORE::localtime(time);
     $mon++;
@@ -48,9 +49,7 @@ sub new {
     my $month_re = do { local $" = '|'; qr/(?:@month_name)/i };
     my %colormap = %DEFAULT_COLORMAP;
 
-    my %obj;
-    my $obj = bless \%obj, $class;
-    %obj = (
+    %{$obj} = (
 
 	# internal use
 	months      => 0,
@@ -212,13 +211,14 @@ sub deal_option {
 
 sub prepare {
     my $app = shift;
-    apply \&_prepare => $app,
-	qw(years months before after year mon column);
+    call \&_prepare,
+	for  => $app,
+	with => [ qw(years months before after year mon column) ];
     return $app;
 }
 
 sub _prepare {
-    my @vars = \(
+    my @args = \(
 	my($years, $months, $before, $after, $year, $mon, $column) = @_
     );
 
@@ -252,7 +252,7 @@ sub _prepare {
 
     $year += $year < 50 ? 2000 : $year < 100 ? 1900 : 0;
 
-    map { ${$_} } @vars;
+    map ${$_}, @args;
 }
 
 sub show {
