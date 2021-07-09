@@ -8,7 +8,7 @@ use utf8;
 use Encode;
 use Time::localtime;
 use List::Util qw(min max);
-use List::MoreUtils qw(zip pairwise);
+use List::MoreUtils qw(zip);
 use Hash::Util qw(lock_keys);
 use Pod::Usage;
 use Data::Dumper;
@@ -212,10 +212,15 @@ sub deal_option {
 
 sub prepare {
     my $app = shift;
-    my @vars  = \(my($years, $months, $before, $after, $year, $mon, $column));
-    my @names =   qw( years   months   before   after   year   mon   column);
-   (my $hello   = sub { pairwise { ${$a} = $app->{$b} } @vars, @names })->();
-    my $goodbye = sub { pairwise { $app->{$b} = ${$a} } @vars, @names };
+    apply \&_prepare => $app,
+	qw(years months before after year mon column);
+    return $app;
+}
+
+sub _prepare {
+    my @vars = \(
+	my($years, $months, $before, $after, $year, $mon, $column) = @_
+    );
 
     use integer;
     if ($months == 1) {
@@ -247,8 +252,7 @@ sub prepare {
 
     $year += $year < 50 ? 2000 : $year < 100 ? 1900 : 0;
 
-    $goodbye->();
-    return $app;
+    map { ${$_} } @vars;
 }
 
 sub show {

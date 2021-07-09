@@ -97,4 +97,9 @@ sub decode_argv {
     @_;
 }
 
+sub apply {
+    my($sub, $hash, @keys) = @_;
+    @{$hash}{@keys} = $sub->(@{$hash}{@keys});
+}
+
 1;
