@@ -8,7 +8,6 @@ use utf8;
 use Encode;
 use Time::localtime;
 use List::Util qw(min max);
-use List::MoreUtils qw(zip);
 use Hash::Util qw(lock_keys);
 use Pod::Usage;
 use Data::Dumper;
@@ -45,7 +44,7 @@ sub new {
     $year += 1900;
 
     my @month_name = qw(JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC);
-    my %month = zip @month_name, @{[1..12]};
+    my %month = map { $month_name[$_] => $_ + 1 } 0 .. $#month_name;
     my $month_re = do { local $" = '|'; qr/(?:@month_name)/i };
     my %colormap = %DEFAULT_COLORMAP;
 

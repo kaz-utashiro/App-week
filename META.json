@@ -47,7 +47,6 @@
             "Getopt::EX::i18n" : "0.09",
             "Getopt::EX::termcolor" : "1.06",
             "Hash::Util" : "0",
-            "List::MoreUtils" : "0",
             "List::Util" : "1.45",
             "Text::ANSI::Fold" : "2.10",
             "Text::VisualWidth::PP" : "0.05",
