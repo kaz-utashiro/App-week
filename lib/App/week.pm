@@ -17,6 +17,16 @@ use Getopt::EX::Colormap;
 use App::week::Util;
 use App::week::CalYear qw(@calyear);
 
+my @DOW_LABELS = qw(
+    DOW_SU
+    DOW_MO
+    DOW_TU
+    DOW_WE
+    DOW_TH
+    DOW_FR
+    DOW_SA
+    );
+
 my %DEFAULT_COLORMAP = (
     (),      DAYS => "L05/335",
     (),      WEEK => "L05/445",
@@ -26,13 +36,7 @@ my %DEFAULT_COLORMAP = (
     (),  THISDAYS => "555/113",
     (),  THISWEEK => "L05/445",
     (), THISMONTH => "555/113",
-    (),    DOW_SU => "",
-    (),    DOW_MO => "",
-    (),    DOW_TU => "",
-    (),    DOW_WE => "",
-    (),    DOW_TH => "",
-    (),    DOW_FR => "",
-    (),    DOW_SA => "",
+    map { $_ => "" } @DOW_LABELS,
     );
 
 sub new {
@@ -93,9 +97,9 @@ sub new {
 		die "@_: Option error\n";
 	    }
 	    else {
-		@{$obj}{qw(year mon mday show_year)} =
-		    guess_date($_,
-			       @{$obj}{qw(year mon mday show_year)});
+		call \&guess_date,
+		    for => $obj,
+		    with => [ qw(year mon mday show_year) ];
 	    }
 	},
 	);
@@ -326,9 +330,8 @@ sub week_line {
     my $obj = shift;
     my $week = shift;
     my @week = split_week $week;
-    my @label = map "DOW_$_", qw(SU MO TU WE TH FR SA);
     for (0..6) {
-	if (my $color = $obj->colormap->{$label[$_]}) {
+	if (my $color = $obj->colormap->{$DOW_LABELS[$_]}) {
 	    my $i = $_ * 2 + 1;
 	    $week[$i] = $obj->color($color, $week[$i]);
 	}

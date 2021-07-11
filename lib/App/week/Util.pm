@@ -33,7 +33,6 @@ my %abbr = do {
 };
 
 sub guess_date {
-    my $date_str = local $_ = shift;
     my @args = \(
 	my($year, $mon, $mday, $show_year) = @_
     );
@@ -64,6 +63,7 @@ sub guess_date {
 	}
     }
     else {
+	my $orig = $_;
 	$mday = $1 if s{[-./]*(\d+)日?$}{};
 	$mon  = $1 if s{[-./]*(\d+)月?$}{};
 	$year = $1 if s{(?:西暦)?(\d+)年?$}{};
@@ -72,7 +72,7 @@ sub guess_date {
 	    undef $mday;
 	    $show_year++;
 	}
-	die "$date_str: format error" if length;
+	die "$orig: format error" if length;
     }
 
     map ${$_}, @args;
