@@ -47,9 +47,6 @@ sub new {
     $mon++;
     $year += 1900;
 
-    my @month_name = qw(JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC);
-    my %month = map { $month_name[$_] => $_ + 1 } 0 .. $#month_name;
-    my $month_re = do { local $" = '|'; qr/(?:@month_name)/i };
     my %colormap = %DEFAULT_COLORMAP;
 
     %{$obj} = (
@@ -59,7 +56,6 @@ sub new {
 	year        => $year,
 	mday        => $mday,
 	mon         => $mon,
-	mday_re     => undef,
 
 	cell_width => 22,
 	frame => '  ',
@@ -87,20 +83,9 @@ sub new {
 	config      => {},
 	"<>"        => sub {
 	    local $_ = $_[0];
-	    if (/^-+([0-9]+)$/) {
-		$obj->{months} = $1;
-	    }
-	    elsif (/^($month_re)/) {
-		$obj->{mon} = $month{uc($1)};
-	    }
-	    elsif (/^-/) {
-		die "@_: Option error\n";
-	    }
-	    else {
-		call \&guess_date,
-		    for => $obj,
-		    with => [ qw(year mon mday show_year) ];
-	    }
+	    call \&guess_date,
+		for => $obj,
+		with => [ qw(months year mon mday show_year) ];
 	},
 	);
 

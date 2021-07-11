@@ -32,12 +32,25 @@ my %abbr = do {
     qw( M:明治 T:大正 S:昭和 H:平成 R:令和 );
 };
 
+my @month_name = qw(JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC);
+my %month = map { $month_name[$_] => $_ + 1 } 0 .. $#month_name;
+my $month_re = do { local $" = '|'; qr/(?:@month_name)/i };
+
 sub guess_date {
+    my $orig = $_;
     my @args = \(
-	my($year, $mon, $mday, $show_year) = @_
+	my($months, $year, $mon, $mday, $show_year) = @_
     );
 
-    if (m{
+    # -9
+    if (/^-+([0-9]+)$/) {
+	$months = $1;
+    }
+    # Jan ... Dec
+    elsif (/^($month_re)/) {
+	$mon = $month{uc($1)};
+    }
+    elsif (m{
 	^
 	  (?<Y> (?: [A-Z] | \p{Han}+ ) \d++ ) [-./年]?
 	  (?: (?<M> \d++ ) [-./月]?
@@ -63,7 +76,6 @@ sub guess_date {
 	}
     }
     else {
-	my $orig = $_;
 	$mday = $1 if s{[-./]*(\d+)日?$}{};
 	$mon  = $1 if s{[-./]*(\d+)月?$}{};
 	$year = $1 if s{(?:西暦)?(\d+)年?$}{};
@@ -72,7 +84,10 @@ sub guess_date {
 	    undef $mday;
 	    $show_year++;
 	}
-	die "$orig: format error" if length;
+	if (length) {
+	    die "$orig: option error\n" if /^-/;
+	    die "$orig: format error\n";
+	}
     }
 
     map ${$_}, @args;
