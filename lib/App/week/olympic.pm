@@ -94,5 +94,5 @@ option --tokyo2020-rev \
 
 option --gold-frame --cm FRAME=+/2020金
 
-option --tokyo2020-gold     --tokyo2020
+option --tokyo2020-gold     --tokyo2020     --gold-frame
 option --tokyo2020-gold-rev --tokyo2020-rev --gold-frame
