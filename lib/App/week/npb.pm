@@ -1,4 +1,4 @@
-package App::week::teams;
+package App::week::npb;
 1;
 __DATA__
 

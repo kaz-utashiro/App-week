@@ -5,15 +5,15 @@ __DATA__
 
 autoload -Mcolors --mono --green --lavender --pastel
 
-autoload -Mteams \
+autoload -Mnpb \
 	--team \
 	--giants --giants-rev \
 	--tigers --tigers-rev \
 	--lions --lions-rev --lions2 --lions2-rev --lions3 --lions3-rev
 
 autoload -Molympic \
-	--olympic-dow --olympic-dow-rev \
-	--tokyo2020 --tokyo2020-rev \
+	--olympic-dow    --olympic-dow-rev \
+	--tokyo2020      --tokyo2020-rev \
 	--tokyo2020-gold --tokyo2020-gold-rev \
 	--gold-frame
 
