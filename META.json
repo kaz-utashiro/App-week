@@ -1,7 +1,7 @@
 {
    "abstract" : "colorful calendar command",
    "author" : [
-      "Kazumasa Utashiro <kaz@utashiro.com>"
+      "Kazumasa Utashiro"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v3.1.12, CPAN::Meta::Converter version 2.150010",
@@ -74,6 +74,7 @@
    "version" : "0.13",
    "x_authority" : "cpan:UTASHIRO",
    "x_contributors" : [
+      "Kazumasa Utashiro <kaz@utashiro.com>",
       "Shlomi Fish <shlomif@shlomifish.org>"
    ],
    "x_serialization_backend" : "JSON::PP version 4.04",

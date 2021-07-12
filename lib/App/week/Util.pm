@@ -37,17 +37,13 @@ my %month = map { $month_name[$_] => $_ + 1 } 0 .. $#month_name;
 my $month_re = do { local $" = '|'; qr/(?:@month_name)/i };
 
 sub guess_date {
-    my $orig = $_;
+    my $__ = $_;
     my @args = \(
-	my($months, $year, $mon, $mday, $show_year) = @_
+	my($year, $mon, $mday, $show_year) = @_
     );
 
-    # -9
-    if (/^-+([0-9]+)$/) {
-	$months = $1;
-    }
     # Jan ... Dec
-    elsif (/^($month_re)/) {
+    if (/^($month_re)/) {
 	$mon = $month{uc($1)};
     }
     elsif (m{
@@ -85,8 +81,7 @@ sub guess_date {
 	    $show_year++;
 	}
 	if (length) {
-	    die "$orig: option error\n" if /^-/;
-	    die "$orig: format error\n";
+	    die "$__: format error\n";
 	}
     }
 

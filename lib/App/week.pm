@@ -52,6 +52,7 @@ sub new {
     %{$obj} = (
 
 	# internal use
+	argv        => [],
 	months      => 0,
 	year        => $year,
 	mday        => $mday,
@@ -83,9 +84,13 @@ sub new {
 	config      => {},
 	"<>"        => sub {
 	    local $_ = $_[0];
-	    call \&guess_date,
-		for => $obj,
-		with => [ qw(months year mon mday show_year) ];
+	    if (/^-+([0-9]+)$/) {
+		$obj->{months} = $1;
+	    } elsif (/^-/) {
+		die "$_: Unknown option\n";
+	    } else {
+		push @{$obj->{argv}}, $_;
+	    }
 	},
 	);
 
@@ -131,6 +136,7 @@ sub run {
     local @ARGV = decode_argv @_;
 
     $app->read_option()
+	->argv()
 	->deal_option()
 	->prepare()
 	->show();
@@ -144,6 +150,16 @@ sub read_option {
     ExConfigure BASECLASS => [ "App::week", "Getopt::EX", "" ];
     Configure qw(bundling no_getopt_compat no_ignore_case pass_through);
     GetOptions($app, @optargs) || usage;
+    return $app;
+}
+
+sub argv {
+    my $app = shift;
+    for (@{$app->{argv}}) {
+	call \&guess_date,
+	    for => $app,
+	    with => [ qw(year mon mday show_year) ];
+    }
     return $app;
 }
 
@@ -186,9 +202,9 @@ sub deal_option {
 	    die "$m: Month must be within 0 to 12\n";
 	}
 	App::week::CalYear::Configure
-	    show_year => { $app->{year} => [ $m ], '*' => [ 1 ] };
+	    show_year => { $app->{year} => $m, '*' => 1 };
     } else {
-	App::week::CalYear::Configure show_year => [ 1 ];
+	App::week::CalYear::Configure show_year => 1;
     }
 	
     # -y, -Y
@@ -344,7 +360,7 @@ Yet another calendar command.  Read the script's manual for detail.
 
 =head1 AUTHOR
 
-Kazumasa Utashiro E<lt>kaz@utashiro.comE<gt>
+Kazumasa Utashiro
 
 =head1 LICENSE
 

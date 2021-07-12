@@ -27,9 +27,9 @@ Options:
     -y      year calendar
     -Y[#]   # years of calendar
     -c #    number of columns (default 3)
-    -l      I18N options (See below)
     -p #    print year on month-# (default current, 0 for none)
     -P      print year on all months
+    -l      I18N options (See below)
 
     --theme theme
             Apply color theme

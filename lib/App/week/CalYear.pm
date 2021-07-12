@@ -126,9 +126,14 @@ sub show_year {
     if (ref $conf eq 'ARRAY') {
 	@{$conf};
     } else {
-	uniq( map  { @{$conf->{$_}} }
-	      grep { $_ eq '*' or $_ == $year }
-	      keys %$conf );
+	uniq do {
+	    map  {
+		my $v = $conf->{$_};
+		ref $v eq 'ARRAY' ? @$v : $v
+	    }
+	    grep { $_ eq '*' or $_ == $year }
+	    keys %$conf;
+	};
     }
 }
 
