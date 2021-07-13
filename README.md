@@ -9,7 +9,7 @@ week - colorful calendar command
 
 Options:
 
-    -#      # months surronding today (default 3)
+    -#,-m#  # months surronding today (default 3)
     -A #    after current month
     -B #    before current month
     -C[#]   before and after current month (default 4)
@@ -37,7 +37,7 @@ I18N options:
 Color modules:
 
     -Mcolors
-    -Mteams
+    -Mnpb
     -Molympic
 
 # VERSION
@@ -49,9 +49,12 @@ Version 0.13
 By default, **week** command display the previous, current and next
 month surrounding today, just like **-3** option of [cal(1)](http://man.he.net/man1/cal) command.
 
-Number of month can be given with dash.
+Number of month can be given with dash, or **-m** option which can be
+mixed up with other parameters.  **-c** option specifies number of
+columns.
 
     $ week -12
+    $ week -m21c7
 
 Before and after months can be specified with **-B** and **-A** option,
 and **-C** for both.
@@ -177,7 +180,7 @@ load appropriate module automatically in default start up module
         --green
         --pastel
 
-- **-Mteams**
+- **-Mnpb** (Nippon Professional Baseball Organization)
 
         --tigers, --tigers-rev
         --giants, --giants-rev
@@ -186,6 +189,7 @@ load appropriate module automatically in default start up module
 - **-Molympic**
 
         --tokyo2020, --tokyo2020-rev
+        --tokyo2020-gold, --tokyo2020-gold-rev
 
 - **--theme**
 
@@ -243,4 +247,4 @@ The following copyright notice applies to all the files provided in
 this distribution, including binary files, unless explicitly noted
 otherwise.
 
-Copyright 2018- Kazumasa Utashiro
+Copyright 2018-2021 Kazumasa Utashiro

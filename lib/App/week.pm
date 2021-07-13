@@ -53,7 +53,6 @@ sub new {
 
 	# internal use
 	argv        => [],
-	months      => 0,
 	year        => $year,
 	mday        => $mday,
 	mon         => $mon,
@@ -67,6 +66,7 @@ sub new {
 
 	# option params
 	help        => undef,
+	months      => 0,
 	after       => undef,
 	before      => 1,
 	center      => sub {
@@ -110,6 +110,7 @@ my @optargs = make_options << "END";
     frame_height | H =i
 
     help         | h
+    months       | m =i
     after        | A :1
     before       | B :1
     center       | C :4

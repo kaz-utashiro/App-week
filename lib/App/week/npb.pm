@@ -2,9 +2,6 @@ package App::week::npb;
 1;
 __DATA__
 
-option --termcolor::bg -Mtermcolor::bg(light=--$<shift>,dark=--$<shift>-rev)
-option --team --termcolor::bg $<copy(0,1)>
-
 define 赤 400
 define 黄 550
 define 黒 L00

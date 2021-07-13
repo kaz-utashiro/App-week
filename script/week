@@ -20,7 +20,7 @@ B<week> [ -MI<module> ] [ option ] [ date ]
 
 Options:
 
-    -#      # months surronding today (default 3)
+    -#,-m#  # months surronding today (default 3)
     -A #    after current month
     -B #    before current month
     -C[#]   before and after current month (default 4)
@@ -48,7 +48,7 @@ I18N options:
 Color modules:
 
     -Mcolors
-    -Mteams
+    -Mnpb
     -Molympic
 
 =head1 VERSION
@@ -60,9 +60,12 @@ Version 0.13
 By default, B<week> command display the previous, current and next
 month surrounding today, just like B<-3> option of L<cal(1)> command.
 
-Number of month can be given with dash.
+Number of month can be given with dash, or B<-m> option which can be
+mixed up with other parameters.  B<-c> option specifies number of
+columns.
 
     $ week -12
+    $ week -m21c7
 
 Before and after months can be specified with B<-B> and B<-A> option,
 and B<-C> for both.
@@ -195,7 +198,7 @@ load appropriate module automatically in default start up module
     --green
     --pastel
 
-=item B<-Mteams>
+=item B<-Mnpb> (Nippon Professional Baseball Organization)
 
     --tigers, --tigers-rev
     --giants, --giants-rev
@@ -204,6 +207,7 @@ load appropriate module automatically in default start up module
 =item B<-Molympic>
 
     --tokyo2020, --tokyo2020-rev
+    --tokyo2020-gold, --tokyo2020-gold-rev
 
 =item B<--theme>
 
@@ -267,6 +271,6 @@ The following copyright notice applies to all the files provided in
 this distribution, including binary files, unless explicitly noted
 otherwise.
 
-Copyright 2018- Kazumasa Utashiro
+Copyright 2018-2021 Kazumasa Utashiro
 
 =cut
