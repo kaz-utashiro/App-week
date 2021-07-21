@@ -31,7 +31,7 @@ sub FETCH {
 my %config = (
     netbsd     => undef,
     crashspace => undef,
-    show_year  => [ 1 ],
+    show_year  => 1,
     wareki     => undef,
 );
 lock_keys %config;
@@ -61,12 +61,16 @@ sub CalYear {
     };
     @monthline == 4 or die "cal(1) command format error.\n";
 
-    state $fields = fielder($cal[ $monthline[0] + 1 ]);
+    state $fielder = do {
+	my @weekline = map $_ + 1, @monthline;
+	fielder($cal[ $weekline[0] ]);
+    };
+
     my @month = ( [ $cal[0] ], map [], 1..12 );
     for my $i (0 .. $#monthline) {
 	my $start = $monthline[$i];
 	for my $n (0..7) {
-	    my @m = $fields->($cal[$start + $n]);
+	    my @m = $fielder->($cal[$start + $n]);
 	    push @{$month[$i * 3 + 1]}, $m[0];
 	    push @{$month[$i * 3 + 2]}, $m[1];
 	    push @{$month[$i * 3 + 3]}, $m[2];
@@ -123,9 +127,13 @@ sub fielder {
 sub show_year {
     my $conf = $config{show_year};
     my $year = shift;
-    if (ref $conf eq 'ARRAY') {
+    if ((my $ref = ref $conf) eq '') {
+	( $conf );
+    }
+    elsif ($ref eq 'ARRAY') {
 	@{$conf};
-    } else {
+    }
+    elsif ($ref eq 'HASH') {
 	uniq do {
 	    map  {
 		my $v = $conf->{$_};
