@@ -39,92 +39,64 @@ my %DEFAULT_COLORMAP = (
     map { $_ => "" } @DOW_LABELS,
     );
 
-sub new {
-    my $class = shift;
-    my $obj = bless {}, $class;
+my %colormap = %DEFAULT_COLORMAP;
 
-    my($sec, $min, $hour, $mday, $mon, $year) = CORE::localtime(time);
-    $mon++;
-    $year += 1900;
+my($sec, $min, $hour, $mday, $mon, $year) = CORE::localtime(time);
+$mon++;
+$year += 1900;
 
-    my %colormap = %DEFAULT_COLORMAP;
+use Getopt::EX::Hashed;
 
-    %{$obj} = (
+has argv => default => [];
+has year => default => $year;
+has mday => default => $mday;
+has mon  => default => $mon;
 
-	# internal use
-	argv        => [],
-	year        => $year,
-	mday        => $mday,
-	mon         => $mon,
+has cell_width   => default => 22;
+has frame        => default => '  ';
+has frame_height => default => 1;
 
-	cell_width => 22,
-	frame => '  ',
-	frame_height => 1,
+has COLORMAP => default => \%colormap;
+has CM       => default => Getopt::EX::Colormap->new(HASH => \%colormap);
 
-	COLORMAP => \%colormap,
-	CM => Getopt::EX::Colormap->new(HASH => \%colormap),
+# option params
+has help        => spec => 'h       ' ;
+has months      => spec => 'm =i    ' , default => 0;
+has after       => spec => 'A :1    ' ;
+has before      => spec => 'B :1    ' , default => 1;
+has column      => spec => 'c =n    ' , default => 3;
+has colordump   => spec => '        ' ;
+has colormap    => spec => '  =s@ cm' , default => [];
+has show_year   => spec => 'y       ' ;
+has years       => spec => 'Y :1    ' ;
+has usage       => spec => '  :s    ' ;
+has rgb24       => spec => '  !     ' ;
+has year_on_all => spec => 'P       ' ;
+has year_on     => spec => 'p =i    ' ;
+has config      => spec => '  =s%   ' , default => {};
 
-	# option params
-	help        => undef,
-	months      => 0,
-	after       => undef,
-	before      => 1,
-	center      => sub {
-	    $obj->{after} = $obj->{before} = $_[1];
-	},
-	column      => 3,
-	colordump   => undef,
-	colormap    => [],
-	show_year   => undef,
-	years       => undef,
-	usage       => undef,
-	rgb24       => undef,
-	year_on_all => undef,
-	year_on     => undef,
-	config      => {},
-	"<>"        => sub {
-	    local $_ = $_[0];
-	    if (/^-+([0-9]+)$/) {
-		$obj->{months} = $1;
-	    } elsif (/^-/) {
-		die "$_: Unknown option\n";
-	    } else {
-		push @{$obj->{argv}}, $_;
-	    }
-	},
-	);
+has center =>
+    spec => 'C :4' ,
+    default => sub { $_->{after} = $_->{before} = $_[1] };
 
-    lock_keys %{$obj};
-    $obj;
-}
+has "<>" =>
+    default => sub {
+	my $obj = $_;
+	local $_ = $_[0];
+	if (/^-+([0-9]+)$/) {
+	    $obj->{months} = $1;
+	} elsif (/^-/) {
+	    die "$_: Unknown option\n";
+	} else {
+	    push @{$obj->{argv}}, $_;
+	}
+    };
+
+no  Getopt::EX::Hashed;
 
 sub colormap { (+shift)->{COLORMAP} }
 sub colorobj { (+shift)->{CM} }
 sub color    { (+shift)->colorobj->color(@_) }
-
-my @optargs = make_options << "END";
-
-    # undocumened yet
-    config           =s%
-    frame        | F =s
-    frame_height | H =i
-
-    help         | h
-    months       | m =i
-    after        | A :1
-    before       | B :1
-    center       | C :4
-    show_year    | y
-    years        | Y :1
-    year_on_all  | P
-    year_on      | p =i
-    column       | c =n
-    colormap|cm      =s@
-    colordump
-    rgb24            !
-    usage            :s
-    <>
-END
 
 sub usage {
     pod2usage(-verbose => 0, -exitval => "NOEXIT");
@@ -150,7 +122,7 @@ sub read_option {
     use Getopt::EX::Long qw(:DEFAULT Configure ExConfigure);
     ExConfigure BASECLASS => [ "App::week", "Getopt::EX", "" ];
     Configure qw(bundling no_getopt_compat no_ignore_case pass_through);
-    GetOptions($app, @optargs) || usage;
+    $app->getopt || usage;
     return $app;
 }
 
@@ -207,7 +179,7 @@ sub deal_option {
     } else {
 	App::week::CalYear::Configure show_year => 1;
     }
-	
+
     # -y, -Y
     $app->{years} //= 1 if $app->{show_year};
 
