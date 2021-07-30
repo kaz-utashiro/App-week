@@ -60,24 +60,26 @@ has COLORMAP => default => \%colormap;
 has CM       => default => Getopt::EX::Colormap->new(HASH => \%colormap);
 
 # option params
-has help        => spec => 'h       ' ;
-has months      => spec => 'm =i    ' , default => 0;
-has after       => spec => 'A :1    ' ;
-has before      => spec => 'B :1    ' , default => 1;
-has column      => spec => 'c =n    ' , default => 3;
-has colordump   => spec => '        ' ;
-has colormap    => spec => '  =s@ cm' , default => [];
-has show_year   => spec => 'y       ' ;
-has years       => spec => 'Y :1    ' ;
-has usage       => spec => '  :s    ' ;
-has rgb24       => spec => '  !     ' ;
-has year_on_all => spec => 'P       ' ;
-has year_on     => spec => 'p =i    ' ;
-has config      => spec => '  =s%   ' , default => {};
+has help        => spec => 'h      ' ;
+has months      => spec => 'm=i    ' , default => 0;
+has after       => spec => 'A:1    ' ;
+has before      => spec => 'B:1    ' , default => 1;
+has column      => spec => 'c=n    ' , default => 3;
+has colordump   => spec => '       ' ;
+has colormap    => spec => ' =s@ cm' , default => [];
+has show_year   => spec => 'y      ' ;
+has years       => spec => 'Y:1    ' ;
+has usage       => spec => ' :s    ' ;
+has rgb24       => spec => ' !     ' ;
+has year_on_all => spec => 'P      ' ;
+has year_on     => spec => 'p=i    ' ;
+has config      => spec => ' =s%   ' , default => {};
 
 has center =>
-    spec => 'C :4' ,
-    default => sub { $_->{after} = $_->{before} = $_[1] };
+    spec => 'C:4',
+    default => sub {
+	$_->{after} = $_->{before} = $_[1];
+    };
 
 has "<>" =>
     default => sub {
