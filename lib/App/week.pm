@@ -47,7 +47,10 @@ $year += 1900;
 
 use Getopt::EX::Hashed;
 
-has argv => default => [];
+Getopt::EX::Hashed->configure(DEFAULT => [ is => 'ro' ]);
+
+has ARGV => default => [];
+
 has year => default => $year;
 has mday => default => $mday;
 has mon  => default => $mon;
@@ -69,20 +72,19 @@ has colordump   => spec => '       ' ;
 has colormap    => spec => ' =s@ cm' , default => [];
 has show_year   => spec => 'y      ' ;
 has years       => spec => 'Y:1    ' ;
-has usage       => spec => ' :s    ' ;
 has rgb24       => spec => ' !     ' ;
 has year_on_all => spec => 'P      ' ;
 has year_on     => spec => 'p=i    ' ;
 has config      => spec => ' =s%   ' , default => {};
 
 has center =>
-    spec => 'C:4',
-    default => sub {
+    spec   => 'C:4',
+    action => sub {
 	$_->{after} = $_->{before} = $_[1];
     };
 
 has "<>" =>
-    default => sub {
+    action => sub {
 	my $obj = $_;
 	local $_ = $_[0];
 	if (/^-+([0-9]+)$/) {
@@ -90,15 +92,15 @@ has "<>" =>
 	} elsif (/^-/) {
 	    die "$_: Unknown option\n";
 	} else {
-	    push @{$obj->{argv}}, $_;
+	    push @{$obj->{ARGV}}, $_;
 	}
     };
 
 no  Getopt::EX::Hashed;
 
-sub colormap { (+shift)->{COLORMAP} }
-sub colorobj { (+shift)->{CM} }
-sub color    { (+shift)->colorobj->color(@_) }
+sub color {
+    (+shift)->CM->color(@_);
+}
 
 sub usage {
     pod2usage(-verbose => 0, -exitval => "NOEXIT");
@@ -130,7 +132,7 @@ sub read_option {
 
 sub argv {
     my $app = shift;
-    for (@{$app->{argv}}) {
+    for (@{$app->{ARGV}}) {
 	call \&guess_date,
 	    for => $app,
 	    with => [ qw(year mon mday show_year) ];
@@ -145,7 +147,7 @@ sub deal_option {
     $app->{help} and usage;
 
     # load --colormap option
-    $app->colorobj
+    $app->CM
 	->load_params(@{$app->{colormap}});
 
     # --colordump
@@ -307,7 +309,7 @@ sub week_line {
     my $week = shift;
     my @week = split_week $week;
     for (0..6) {
-	if (my $color = $obj->colormap->{$DOW_LABELS[$_]}) {
+	if (my $color = $obj->COLORMAP->{$DOW_LABELS[$_]}) {
 	    my $i = $_ * 2 + 1;
 	    $week[$i] = $obj->color($color, $week[$i]);
 	}
