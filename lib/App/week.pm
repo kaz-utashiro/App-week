@@ -64,6 +64,7 @@ has CM       => default => Getopt::EX::Colormap->new(HASH => \%colormap);
 
 # option params
 has help        => spec => 'h      ' ;
+has version     => spec => 'v      ' ;
 has months      => spec => 'm=i    ' , default => 0;
 has after       => spec => 'A:1    ' ;
 has before      => spec => 'B:1    ' , default => 1;
@@ -76,6 +77,17 @@ has rgb24       => spec => ' !     ' ;
 has year_on_all => spec => 'P      ' ;
 has year_on     => spec => 'p=i    ' ;
 has config      => spec => ' =s%   ' , default => {};
+
+has '+help' => action => sub {
+    pod2usage
+	-verbose  => 99,
+	-sections => [ qw(SYNOPSIS VERSION) ];
+};
+
+has '+version' => action  => sub {
+    print "Version: $VERSION\n";
+    exit;
+};
 
 has center =>
     spec   => 'C:4',
@@ -92,7 +104,7 @@ has "<>" =>
 	} elsif (/^-/) {
 	    die "$_: Unknown option\n";
 	} else {
-	    push @{$obj->{ARGV}}, $_;
+	    push @{$obj->ARGV}, $_;
 	}
     };
 
@@ -132,7 +144,7 @@ sub read_option {
 
 sub argv {
     my $app = shift;
-    for (@{$app->{ARGV}}) {
+    for (@{$app->ARGV}) {
 	call \&guess_date,
 	    for => $app,
 	    with => [ qw(year mon mday show_year) ];
@@ -143,49 +155,46 @@ sub argv {
 sub deal_option {
     my $app = shift;
 
-    # --help
-    $app->{help} and usage;
-
     # load --colormap option
     $app->CM
-	->load_params(@{$app->{colormap}});
+	->load_params(@{$app->colormap});
 
     # --colordump
-    if ($app->{colordump}) {
-	print $app->colorobj->colormap(
+    if ($app->colordump) {
+	print $app->CM->colormap(
 	    name   => '--changeme',
 	    option => '--colormap');
 	exit;
     }
 
     # --rgb24
-    if (defined $app->{rgb24}) {
+    if (defined $app->rgb24) {
 	no warnings 'once';
-	$Getopt::EX::Colormap::RGB24 = $app->{rgb24};
+	$Getopt::EX::Colormap::RGB24 = $app->rgb24;
     }
 
     # --config
-    if (%{$app->{config}}) {
-	App::week::CalYear::Configure %{$app->{config}};
+    if (%{$app->config}) {
+	App::week::CalYear::Configure %{$app->config};
     }
 
     # -p, -P
-    $app->{year_on} //= $app->{mon} if $app->{mday};
-    if ($app->{year_on_all}) {
+    $app->{year_on} //= $app->mon if $app->mday;
+    if ($app->year_on_all) {
 	App::week::CalYear::Configure show_year => [ 1..12 ];
     }
-    elsif (defined(my $m = $app->{year_on})) {
+    elsif (defined(my $m = $app->year_on)) {
 	if ($m < 0 or 12 < $m) {
 	    die "$m: Month must be within 0 to 12\n";
 	}
 	App::week::CalYear::Configure
-	    show_year => { $app->{year} => $m, '*' => 1 };
+	    show_year => { $app->year => $m, '*' => 1 };
     } else {
 	App::week::CalYear::Configure show_year => 1;
     }
 
     # -y, -Y
-    $app->{years} //= 1 if $app->{show_year};
+    $app->{years} //= 1 if $app->show_year;
 
     return $app;
 }
@@ -240,10 +249,10 @@ sub show {
     my $app = shift;
     $app->display(
 	map {
-	    $app->cell( $app->{year},
-			$app->{mon} + $_,
-			$_ ? () : $app->{mday} )
-	} -$app->{before} .. $app->{after}
+	    $app->cell( $app->year,
+			$app->mon + $_,
+			$_ ? () : $app->mday )
+	} -$app->before .. $app->after
 	);
     return $app;
 }
@@ -253,9 +262,9 @@ sub show {
 sub display {
     my $obj = shift;
     @_ or return;
-    $obj->h_rule(min($obj->{column}, int @_));
+    $obj->h_rule(min($obj->column, int @_));
     while (@_) {
-	my @cell = splice @_, 0, $obj->{column};
+	my @cell = splice @_, 0, $obj->column;
 	for my $row (transpose @cell) {
 	    $obj->h_line(@{$row});
 	}
@@ -266,15 +275,15 @@ sub display {
 sub h_rule {
     my $obj = shift;
     my $column = shift;
-    my $hr1 = " " x $obj->{cell_width};
-    my $s = join($obj->{frame}, '', ($hr1) x $column, '');
+    my $hr1 = " " x $obj->cell_width;
+    my $s = join($obj->frame, '', ($hr1) x $column, '');
     my $rule = $obj->color(FRAME => $s) . "\n";
-    print $rule x $obj->{frame_height};
+    print $rule x $obj->frame_height;
 }
 
 sub h_line {
     my $obj = shift;
-    my $frame = $obj->color(FRAME => $obj->{frame});
+    my $frame = $obj->color(FRAME => $obj->frame);
     print join($frame, '', @_, '') . "\n";
 }
 
