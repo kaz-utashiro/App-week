@@ -39,76 +39,72 @@ my %DEFAULT_COLORMAP = (
     map { $_ => "" } @DOW_LABELS,
     );
 
-my %colormap = %DEFAULT_COLORMAP;
+use Getopt::EX::Hashed; {
 
-my($sec, $min, $hour, $mday, $mon, $year) = CORE::localtime(time);
-$mon++;
-$year += 1900;
+    Getopt::EX::Hashed->configure(DEFAULT => [ is => 'ro' ]);
 
-use Getopt::EX::Hashed;
+    has ARGV => default => [];
 
-Getopt::EX::Hashed->configure(DEFAULT => [ is => 'ro' ]);
+    my($sec, $min, $hour, $mday, $mon, $year) = CORE::localtime(time);
+    has year => default => $year + 1900;
+    has mday => default => $mday;
+    has mon  => default => $mon + 1;
 
-has ARGV => default => [];
+    has cell_width   => default => 22;
+    has frame        => default => '  ';
+    has frame_height => default => 1;
 
-has year => default => $year;
-has mday => default => $mday;
-has mon  => default => $mon;
+    my %colormap = %DEFAULT_COLORMAP;
+    has COLORMAP => default => \%colormap;
+    has CM       => default => Getopt::EX::Colormap->new(HASH => \%colormap);
 
-has cell_width   => default => 22;
-has frame        => default => '  ';
-has frame_height => default => 1;
+    # option params
+    has help        => spec => ' h        ' ;
+    has version     => spec => ' v        ' ;
+    has months      => spec => ' m =i     ' , default => 0;
+    has after       => spec => ' A :1     ' ;
+    has before      => spec => ' B :1     ' , default => 1;
+    has column      => spec => ' c =i     ' , default => 3;
+    has colordump   => spec => '          ' ;
+    has colormap    => spec => '   =s@ cm ' , default => [];
+    has show_year   => spec => ' y        ' ;
+    has years       => spec => ' Y :1     ' ;
+    has rgb24       => spec => '   !      ' ;
+    has year_on_all => spec => ' P        ' ;
+    has year_on     => spec => ' p =i     ' ;
+    has config      => spec => '   =s%    ' , default => {};
 
-has COLORMAP => default => \%colormap;
-has CM       => default => Getopt::EX::Colormap->new(HASH => \%colormap);
-
-# option params
-has help        => spec => 'h      ' ;
-has version     => spec => 'v      ' ;
-has months      => spec => 'm=i    ' , default => 0;
-has after       => spec => 'A:1    ' ;
-has before      => spec => 'B:1    ' , default => 1;
-has column      => spec => 'c=n    ' , default => 3;
-has colordump   => spec => '       ' ;
-has colormap    => spec => ' =s@ cm' , default => [];
-has show_year   => spec => 'y      ' ;
-has years       => spec => 'Y:1    ' ;
-has rgb24       => spec => ' !     ' ;
-has year_on_all => spec => 'P      ' ;
-has year_on     => spec => 'p=i    ' ;
-has config      => spec => ' =s%   ' , default => {};
-
-has '+help' => action => sub {
-    pod2usage
-	-verbose  => 99,
-	-sections => [ qw(SYNOPSIS VERSION) ];
-};
-
-has '+version' => action  => sub {
-    print "Version: $VERSION\n";
-    exit;
-};
-
-has center =>
-    spec   => 'C:4',
-    action => sub {
-	$_->{after} = $_->{before} = $_[1];
+    has '+help' => action => sub {
+	pod2usage
+	    -verbose  => 99,
+	    -sections => [ qw(SYNOPSIS VERSION) ];
     };
 
-has "<>" =>
-    action => sub {
-	my $obj = $_;
-	local $_ = $_[0];
-	if (/^-+([0-9]+)$/) {
-	    $obj->{months} = $1;
-	} elsif (/^-/) {
-	    die "$_: Unknown option\n";
-	} else {
-	    push @{$obj->ARGV}, $_;
-	}
+    has '+version' => action  => sub {
+	print "Version: $VERSION\n";
+	exit;
     };
 
-no  Getopt::EX::Hashed;
+    has center =>
+	spec   => 'C:4',
+	action => sub {
+	    $_->{after} = $_->{before} = $_[1];
+	};
+
+    has "<>" =>
+	action => sub {
+	    my $obj = $_;
+	    local $_ = $_[0];
+	    if (/^-+([0-9]+)$/) {
+		$obj->{months} = $1;
+	    } elsif (/^-/) {
+		die "$_: Unknown option\n";
+	    } else {
+		push @{$obj->ARGV}, $_;
+	    }
+	};
+
+} no Getopt::EX::Hashed;
 
 sub color {
     (+shift)->CM->color(@_);
