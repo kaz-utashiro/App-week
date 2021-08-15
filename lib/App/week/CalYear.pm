@@ -119,8 +119,8 @@ sub fielder {
     my $fold = Text::ANSI::Fold->new(width => \@w, padding => 1);
     sub {
 	my $l = shift;
-	my @f = map { $_ // $blank } $fold->text($l)->chops;
-	@f[1, 3, 5];
+	my @f = $fold->text($l)->chops;
+	map { $_ // $blank } @f[1, 3, 5];
     };
 }
 
