@@ -98,7 +98,7 @@ environment.
 
     LANG=et_EE week
 
-This command is come with **-Mi18n** module which provides easy way to
+This command come with **-Mi18n** module which provides easy way to
 specify language by command option.  Option **-l** displays option list
 provided by **-Mi18n** module and option **--i18n** and **--i18n-v**
 enables them.  See [Getopt::EX::i18n](https://metacpan.org/pod/Getopt::EX::i18n).
@@ -107,9 +107,9 @@ enables them.  See [Getopt::EX::i18n](https://metacpan.org/pod/Getopt::EX::i18n)
 
 # JAPANESE ERA
 
-By default, year is shown on current month and every January.  When
-used in Japanese locale environment, right side year is displayed in
-Japanese era (wareki: 和暦) format.
+By default, chronological year is shown on current month and every
+January.  When used in Japanese locale environment, right side year is
+displayed in Japanese era (wareki: 和暦) format.
 
 # COLORMAP
 
@@ -212,6 +212,14 @@ site.
     Start up file.  Use like this:
 
         option default --i18n-v --theme tokyo2020
+
+# INSTALL
+
+## CPANMINUS
+
+    $ cpanm App::week
+    or
+    $ curl -sL http://cpanmin.us | perl - App::week
 
 # SEE ALSO
 

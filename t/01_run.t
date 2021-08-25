@@ -62,6 +62,9 @@ SKIP: {
     } else {
 	s/((?=.)[\000-\037])/sprintf("^%c", ord($1)+0100)/ge;
 	warn $_;
+	$_ = `cal 1752`;
+	s/((?=.)[\000-\037])/sprintf("^%c", ord($1)+0100)/ge;
+	warn $_;
     }
 
     my @default = qw(--cm *= -C0p0 1752/9/2);
