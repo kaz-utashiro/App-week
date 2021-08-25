@@ -2,6 +2,11 @@ Revision history for Perl extension App-week
 
 {{$NEXT}}
 
+1.02 2021-08-25T11:22:21Z
+
+    - Use Getopt::EX::Hashed option validation.
+    - Add --para2020 option.
+
 1.0101 2021-08-15T06:31:43Z
 
     - Fix revived bug for remove-trailing-space-system.
