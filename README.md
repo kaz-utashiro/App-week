@@ -190,6 +190,7 @@ load appropriate module automatically in default start up module
 
         --tokyo2020, --tokyo2020-rev
         --tokyo2020-gold, --tokyo2020-gold-rev
+        --para2020, --para2020-rev
 
 - **--theme**
 

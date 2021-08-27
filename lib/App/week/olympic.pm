@@ -105,8 +105,9 @@ option --tokyo2020-gold-rev --tokyo2020-rev --gold-frame
 option --para2020 \
 	--paralympic-dow \
 	--cm FRAME=白/パラ青 \
-	--cm *DAYS=*WEEK=I;パラ緑/白 \
-	--cm *MONTH=I;黒/白 \
-	--cm THIS*=I;白/パラ赤,THISDAY=+DS
+	--cm DAYS=WEEK=パラ緑/白 \
+	--cm *MONTH=黒/白 \
+	--cm THIS*=白/パラ赤,THISDAY=+DS \
+	--cm *DAYS=+I
 
 option --para2020-rev --para2020
