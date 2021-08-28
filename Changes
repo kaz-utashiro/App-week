@@ -2,6 +2,10 @@ Revision history for Perl extension App-week
 
 {{$NEXT}}
 
+1.0201 2021-08-28T09:45:59Z
+
+    - Support tabified Solaris cal(1) output.
+
 1.02 2021-08-25T11:22:21Z
 
     - Use Getopt::EX::Hashed option validation.
