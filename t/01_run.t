@@ -79,6 +79,10 @@ SKIP: {
     my $crashspace =
 	Script->new([qw(--config crashspace=1), @default])->run;
     compare $crashspace->result, $result{"175209_re"}, "crashspace emulation";
+
+    my $solaris =
+	Script->new([qw(--config tabify=1), @default])->run;
+    compare $solaris->result, $result{"175209_re"}, "solaris tab emulation";
 }
 
 done_testing;

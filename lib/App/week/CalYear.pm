@@ -31,6 +31,7 @@ sub FETCH {
 my %config = (
     netbsd     => undef,
     crashspace => undef,
+    tabify     => undef,
     show_year  => 1,
     wareki     => undef,
 );
@@ -44,13 +45,24 @@ sub Configure {
 
 sub CalYear {
     my $year = sprintf "%4d", shift;
-    my $cal = `cal $year` =~ s/_[\b]//gr;
+    my $cal = do {
+	if ($config{tabify}) {
+	    `cal $year | unexpand -a`;
+	} else {
+	    `cal $year`;
+	}
+    };
+    $cal =~ s/_[\b]//g;
 
     if ($config{crashspace}) {
 	$cal =~ s/ +$//mg;
     }
     if ($config{netbsd}) {
 	$cal =~ s/(Su|Mo|We|Fr|Sa)/' ' . substr($1,0,1)/mge;
+    }
+
+    if ($cal =~ /\t/) {
+	$cal = expand_tab($cal);
     }
 
     my @cal = split /\n/, $cal, -1;
@@ -156,6 +168,17 @@ sub insert_year {
 	$len = vwidth $year;
     }
     s/[ ]{$len}(?=[ ]$)/$year/;
+}
+
+sub expand_tab {
+    local $_ = shift;
+    while (/\t/) {
+	s{^(.*?)\K(\t+)}{
+	    my $w = vwidth($1);
+	    ' ' x (8 * length($2) - ($w % 8));
+	}xme or last;
+    }
+    $_;
 }
 
 1;
