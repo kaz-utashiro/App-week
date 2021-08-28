@@ -29,11 +29,13 @@ sub FETCH {
 }
 
 my %config = (
+    show_year  => 1,
+    overstruck => 1,
+    wareki     => undef,
     netbsd     => undef,
     crashspace => undef,
     tabify     => undef,
-    show_year  => 1,
-    wareki     => undef,
+    shortmonth => undef,
 );
 lock_keys %config;
 
@@ -45,26 +47,7 @@ sub Configure {
 
 sub CalYear {
     my $year = sprintf "%4d", shift;
-    my $cal = do {
-	if ($config{tabify}) {
-	    `cal $year | unexpand -a`;
-	} else {
-	    `cal $year`;
-	}
-    };
-    $cal =~ s/_[\b]//g;
-
-    if ($config{crashspace}) {
-	$cal =~ s/ +$//mg;
-    }
-    if ($config{netbsd}) {
-	$cal =~ s/(Su|Mo|We|Fr|Sa)/' ' . substr($1,0,1)/mge;
-    }
-
-    if ($cal =~ /\t/) {
-	$cal = expand_tab($cal);
-    }
-
+    my $cal = normalize(cal($year));
     my @cal = split /\n/, $cal, -1;
     my @monthline = do {
 	map  { $_ - 2 }                 # 2 lines up
@@ -97,6 +80,36 @@ sub CalYear {
 	insert_year(\$month[$month][0], $year, $month, $wareki);
     }
     @month;
+}
+
+sub normalize {
+    local $_ = shift;
+    if (/\t/)  { $_ = expand_tab($_) }
+    if (/\cH/) { s/.\cH//g }
+    $_;
+}
+
+sub cal {
+    my $option = shift;
+    local $_ = `cal $option`;
+    if ($config{crashspace}) {
+	s/ +$//mg;
+    }
+    if ($config{netbsd}) {
+	s/(Su|Mo|We|Fr|Sa)/sprintf '%2.1s', $1/mge;
+    }
+    if ($config{shortmonth}) {
+	s{([A-Z][a-z][a-z])(\w+ )}{
+	    use integer;
+	    my $sp = length($2);
+	    (' ' x ($sp/2 + $sp%2)) . $1 . (' ' x ($sp/2));
+	}mge;
+    }
+    if ($config{tabify} and !/\t/) {
+	# does not expect wide characters
+	s{(.{8})}{ $1 =~ s/ +$/\t/r }ge;
+    }
+    $_;
 }
 
 sub tidy_up {
@@ -172,12 +185,11 @@ sub insert_year {
 
 sub expand_tab {
     local $_ = shift;
-    while (/\t/) {
-	s{^(.*?)\K(\t+)}{
-	    my $w = vwidth($1);
-	    ' ' x (8 * length($2) - ($w % 8));
-	}xme or last;
-    }
+    my $ts = 8;
+    s{ (?:^|\G) (?<lead>.*?) \K (?<tab>\t+) }{
+	my $w = vwidth($+{lead});
+	(' ' x ($ts * length($+{tab}) - ($w % $ts)));
+    }xgme;
     $_;
 }
 
