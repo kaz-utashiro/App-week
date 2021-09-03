@@ -42,7 +42,7 @@ Color modules:
 
 # VERSION
 
-Version 1.0201
+Version 1.0202
 
 # DESCRIPTION
 

@@ -2,6 +2,10 @@ Revision history for Perl extension App-week
 
 {{$NEXT}}
 
+1.0202 2021-09-03T13:38:21Z
+
+    - Support Solaris style tab and short month name.
+
 1.0201 2021-08-28T09:45:59Z
 
     - Support tabified Solaris cal(1) output.

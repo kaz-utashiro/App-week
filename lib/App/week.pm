@@ -1,5 +1,5 @@
 package App::week;
-our $VERSION = "1.0201";
+our $VERSION = "1.0202";
 
 use v5.14;
 use warnings;
