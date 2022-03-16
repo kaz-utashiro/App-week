@@ -25,6 +25,7 @@ my @DOW_LABELS = qw(
     DOW_TH
     DOW_FR
     DOW_SA
+    DOW_CW
     );
 
 my %DEFAULT_COLORMAP = (
@@ -52,7 +53,7 @@ use Getopt::EX::Hashed; {
     has mday => default => $mday;
     has mon  => default => $mon + 1;
 
-    has cell_width   => default => 22;
+    has cell_width   => default => undef;
     has frame        => default => '  ';
     has frame_height => default => 1;
 
@@ -76,7 +77,7 @@ use Getopt::EX::Hashed; {
     has '+center' =>
 	sub { $_->{after} = $_->{before} = $_[1] };
 
-    has '+help' => action => sub {
+    has '+help' => sub {
 	pod2usage
 	    -verbose  => 99,
 	    -sections => [ qw(SYNOPSIS VERSION) ];
@@ -290,6 +291,9 @@ sub cell {
 
     my @cal = @{$calyear[$y][$m]};
 
+    # XXX this is not the best place to initalize...
+    $obj->{cell_width} //= length $cal[2];
+
     my %label;
     @label{qw(month week days)} = $d
 	? qw(THISMONTH THISWEEK THISDAYS)
@@ -298,9 +302,9 @@ sub cell {
     $cal[0] = $obj->color($label{month}, $cal[0]);
     $cal[1] = $obj->color($label{week},
 			  state $week = $obj->week_line($cal[1]));
-    my $day_re = $d ? qr/${\(sprintf '%2d', $d)}\b/ : undef;
+    my $day_re = $d ? qr/^(?: [ \d]{2}){0,6} \K(${\(sprintf '%2d', $d)})\b/ : undef;
     for (@cal[ 2 .. $#cal ]) {
-	s/($day_re)/$obj->color("THISDAY", $1)/e if $day_re;
+	s/$day_re/$obj->color("THISDAY", $1)/e if $day_re;
 	$_ = $obj->color($label{days}, $_);
     }
 
@@ -311,9 +315,10 @@ sub week_line {
     my $obj = shift;
     my $week = shift;
     my @week = split_week $week;
-    for (0..6) {
+    for (0..7) {
 	if (my $color = $obj->COLORMAP->{$DOW_LABELS[$_]}) {
 	    my $i = $_ * 2 + 1;
+	    $i > $#week and last;
 	    $week[$i] = $obj->color($color, $week[$i]);
 	}
     }
