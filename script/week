@@ -12,7 +12,7 @@ __END__
 
 =head1 NAME
 
-week - colorful calendar command for terminal
+week - colorful calendar command for the ANSI terminal
 
 =head1 SYNOPSIS
 
@@ -20,7 +20,7 @@ B<week> [ -MI<module> ] [ option ] [ date ]
 
 Options:
 
-    -#,-m#  # months surronding today (default 3)
+    -#,-m#  # months surrounding today (default 3)
     -A #    after current month
     -B #    before current month
     -C[#]   before and after current month (default 4)
@@ -242,8 +242,6 @@ Start up file.  Use like this:
 =head2 CPANMINUS
 
     $ cpanm App::week
-    or
-    $ curl -sL http://cpanmin.us | perl - App::week
 
 =head1 SEE ALSO
 
@@ -282,3 +280,6 @@ otherwise.
 Copyright 2018-2022 Kazumasa Utashiro
 
 =cut
+
+#  LocalWords:  colormap rgb RGB cal LANG wareki perldoc weekrc tokyo
+#  LocalWords:  rev github CPANMINUS cpanm perl Kazumasa Utashiro

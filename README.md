@@ -1,7 +1,7 @@
 [![Actions Status](https://github.com/kaz-utashiro/App-week/workflows/test/badge.svg)](https://github.com/kaz-utashiro/App-week/actions) [![MetaCPAN Release](https://badge.fury.io/pl/App-week.svg)](https://metacpan.org/release/App-week)
 # NAME
 
-week - colorful calendar command for terminal
+week - colorful calendar command for the ANSI terminal
 
 # SYNOPSIS
 
@@ -9,7 +9,7 @@ week - colorful calendar command for terminal
 
 Options:
 
-    -#,-m#  # months surronding today (default 3)
+    -#,-m#  # months surrounding today (default 3)
     -A #    after current month
     -B #    before current month
     -C[#]   before and after current month (default 4)
@@ -218,8 +218,6 @@ site.
 ## CPANMINUS
 
     $ cpanm App::week
-    or
-    $ curl -sL http://cpanmin.us | perl - App::week
 
 # SEE ALSO
 
