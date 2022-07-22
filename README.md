@@ -1,7 +1,7 @@
 [![Actions Status](https://github.com/kaz-utashiro/App-week/workflows/test/badge.svg)](https://github.com/kaz-utashiro/App-week/actions) [![MetaCPAN Release](https://badge.fury.io/pl/App-week.svg)](https://metacpan.org/release/App-week)
 # NAME
 
-week - colorful calendar command for the ANSI terminal
+week - colorful calendar command for ANSI terminal
 
 # SYNOPSIS
 

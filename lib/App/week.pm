@@ -138,7 +138,7 @@ sub argv {
     my $app = shift;
     for (@{$app->ARGV}) {
 	call \&guess_date,
-	    for => $app,
+	    for  => $app,
 	    with => [ qw(year mon mday show_year) ];
     }
     return $app;
@@ -328,11 +328,15 @@ __END__
 
 =head1 NAME
 
-week - colorful calendar command
+week - colorful calendar command for ANSI terminal
 
 =head1 SYNOPSIS
 
 B<week> [ -MI<module> ] [ option ] [ date ]
+
+=head1 VERSION
+
+Version 1.0205
 
 =head1 DESCRIPTION
 
