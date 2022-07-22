@@ -57,24 +57,24 @@ use Getopt::EX::Hashed; {
     has frame_height => default => 1;
 
     # option params
-    has help        => spec => ' h        ' ;
-    has version     => spec => ' v        ' ;
-    has months      => spec => ' m =i     ' , default => 0;
-    has after       => spec => ' A :1     ' , min => 0;
-    has before      => spec => ' B :1     ' , min => 0, default => 1;
-    has center      => spec => ' C :4     ' , min => 0;
-    has column      => spec => ' c =i     ' , min => 1, default => 3;
-    has colordump   => spec => '          ' ;
-    has colormap    => spec => '   =s@ cm ' , default => [];
-    has show_year   => spec => ' y        ' ;
-    has years       => spec => ' Y :1     ' , max => 100;
-    has rgb24       => spec => '   !      ' ;
-    has year_on_all => spec => ' P        ' ;
-    has year_on     => spec => ' p =i     ' , min => 0, max => 12;
-    has config      => spec => '   =s%    ' , default => {};
+    has help        => ' h        ' ;
+    has version     => ' v        ' ;
+    has months      => ' m =i     ' , default => 0;
+    has after       => ' A :1     ' , min => 0;
+    has before      => ' B :1     ' , min => 0, default => 1;
+    has center      => ' C :4     ' , min => 0;
+    has column      => ' c =i     ' , min => 1, default => 3;
+    has colordump   => '          ' ;
+    has colormap    => '   =s@ cm ' , default => [];
+    has show_year   => ' y        ' ;
+    has years       => ' Y :1     ' , max => 100;
+    has rgb24       => '   !      ' ;
+    has year_on_all => ' P        ' ;
+    has year_on     => ' p =i     ' , min => 0, max => 12;
+    has config      => '   =s%    ' , default => {};
 
     has '+center' =>
-	action => sub { $_->{after} = $_->{before} = $_[1] };
+	sub { $_->{after} = $_->{before} = $_[1] };
 
     has '+help' => action => sub {
 	pod2usage
@@ -82,13 +82,13 @@ use Getopt::EX::Hashed; {
 	    -sections => [ qw(SYNOPSIS VERSION) ];
     };
 
-    has '+version' => action  => sub {
+    has '+version' => sub {
 	print "Version: $VERSION\n";
 	exit;
     };
 
     has "<>" =>
-	action => sub {
+	sub {
 	    my $obj = $_;
 	    local $_ = $_[0];
 	    if (/^-+([0-9]+)$/) {

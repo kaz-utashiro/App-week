@@ -1,10 +1,10 @@
 {
-   "abstract" : "colorful calendar command",
+   "abstract" : "colorful calendar command for the ANSI terminal",
    "author" : [
       "Kazumasa Utashiro"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v3.1.12, CPAN::Meta::Converter version 2.150010",
+   "generated_by" : "Minilla/v3.1.19, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
@@ -44,12 +44,12 @@
          "requires" : {
             "Date::Japanese::Era" : "0",
             "Getopt::EX" : "v1.23.3",
-            "Getopt::EX::Hashed" : "0.9920",
+            "Getopt::EX::Hashed" : "1.03",
             "Getopt::EX::i18n" : "0.09",
             "Getopt::EX::termcolor" : "1.06",
             "Hash::Util" : "0",
             "List::Util" : "1.45",
-            "Text::ANSI::Fold" : "2.11",
+            "Text::ANSI::Fold" : "2.13",
             "Text::VisualWidth::PP" : "0.05",
             "perl" : "v5.14.0"
          }
@@ -68,7 +68,7 @@
       "homepage" : "https://github.com/kaz-utashiro/App-week",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/kaz-utashiro/App-week.git",
+         "url" : "https://github.com/kaz-utashiro/App-week.git",
          "web" : "https://github.com/kaz-utashiro/App-week"
       }
    },
