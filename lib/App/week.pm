@@ -73,9 +73,15 @@ use Getopt::EX::Hashed; {
     has year_on_all => ' P        ' ;
     has year_on     => ' p =i     ' , min => 0, max => 12;
     has config      => '   =s%    ' , default => {};
+    has weeknumber  => ' W :1     ' ;
 
-    has '+center' =>
-	sub { $_->{after} = $_->{before} = $_[1] };
+    has '+center' => sub {
+	$_->{after} = $_->{before} = $_[1];
+    };
+
+    has '+weeknumber' => sub {
+	${$_->config}{weeknumber} = $_[1];
+    };
 
     has '+help' => sub {
 	pod2usage
@@ -291,7 +297,7 @@ sub cell {
 
     my @cal = @{$calyear[$y][$m]};
 
-    # XXX this is not the best place to initalize...
+    # XXX this is not the best place to initialize...
     $obj->{cell_width} //= length $cal[2];
 
     my %label;

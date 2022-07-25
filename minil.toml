@@ -6,6 +6,9 @@ authority = "cpan:UTASHIRO"
 
 module_maker = "ModuleBuildTiny"
 
+[release]
+branch = "master"
+
 [unsupported]
 os = [
     "MSWin32",

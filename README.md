@@ -19,6 +19,7 @@ Options:
     -p #    print year on month-# (default current, 0 for none)
     -P      print year on all months
     -l      I18N options (See below)
+    -W      print week number
 
     --theme theme
             Apply color theme
@@ -109,6 +110,17 @@ enables them.  See [Getopt::EX::i18n](https://metacpan.org/pod/Getopt%3A%3AEX%3A
 By default, chronological year is shown on current month and every
 January.  When used in Japanese locale environment, right side year is
 displayed in Japanese era (wareki: 和暦) format.
+
+# WEEK NUMBER
+
+Using option **-W** or **--weeknumber**, week number is printed at the
+end of every week line.  Week number 1 is a week which include January
+1st and count up on every Sunday.
+
+Experimentally **-W1** print _standard week number_ which start with
+first Sunday of the year, and **-W2** print ISO 8601 style week number.
+Because ISO week start on Monday, the result is not intuitive.  This
+option requires [gcal(1)](http://man.he.net/man1/gcal) command installed.
 
 # COLORMAP
 

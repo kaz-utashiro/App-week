@@ -29,14 +29,14 @@ sub FETCH {
 }
 
 my %config = (
-    show_year  => 1,
-    overstruck => 1,
-    wareki     => undef,
-    netbsd     => undef,
-    crashspace => undef,
-    tabify     => undef,
-    shortmonth => undef,
-    weekcount  => undef,
+    show_year      => 1,
+    overstruck     => 1,
+    wareki         => undef,
+    netbsd         => undef,
+    crashspace     => undef,
+    tabify         => undef,
+    shortmonth     => undef,
+    weeknumber     => 0,	# 0)none 1)us 2)standard 3)iso
 );
 lock_keys %config;
 
@@ -49,7 +49,7 @@ sub Configure {
 sub CalYear {
     my $year = sprintf "%4d", shift;
     my $cal = normalize(
-	$config{weekcount} ? gcal($year) : cal($year)
+	$config{weeknumber} > 1 ? gcal($year) : cal($year)
 	);
     my @cal = split /\n/, $cal, -1;
     my @monthline = do {
@@ -117,23 +117,37 @@ sub cal {
 
 sub gcal {
     my $option = shift;
-    local $_ = `gcal -i -H no -K $option`;
+    my $iso = '--iso-week-number=' . ($config{weeknumber} == 2 ? 'no' : 'yes');
+    my $exec = "gcal -i -H no $iso -K $option";
+    local $_ = qx/$exec/;
     $_;
 }
 
 sub tidy_up {
     my $cals = shift;
+    my $wn = 1;
     for my $month (@{$cals}[1..12]) {
+	# insert week number
+	if ($config{weeknumber} == 1) {
+	    $month->[0] .= '   ';
+	    $month->[1] .= ' CW';
+	    for (@{$month}[2..7]) {
+		my $next = /\S$/ ? $wn + 1 : $wn;
+		$_ .= /\S/ ? sprintf(' %02d', $wn) : '   ';
+		$wn = $next;
+	    }
+	}
+	# insert frame
 	for (@{$month}) {
 	    $_ = " $_ ";
 	}
+	# fix month name:
 	for ($month->[0]) {
-	    ## Fix month name:
-	    ## 1) Take care of cal(1) multibyte string bug.
-	    ## 2) Normalize off-to-right to off-to-left.
+	    # 1) Take care of cal(1) multibyte string bug.
+	    # 2) Normalize off-to-right to off-to-left.
 	    if (/^( +)(\S+)( +)$/) {
-		my $sp = length($1) + length($3);
-		my $left = int($sp / 2);
+		my $sp = length $1.$3;
+		my $left = int $sp / 2;
 		my $right = $left + $sp % 2;
 		$_ = ' ' x $left . $2 . ' ' x $right;
 	    }
