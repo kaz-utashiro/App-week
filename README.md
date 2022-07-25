@@ -43,7 +43,7 @@ Color modules:
 
 # VERSION
 
-Version 1.0205
+Version 1.03
 
 # DESCRIPTION
 
