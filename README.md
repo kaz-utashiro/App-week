@@ -18,22 +18,21 @@ Options:
     -c #    number of columns (default 3)
     -p #    print year on month-# (default current, 0 for none)
     -P      print year on all months
-    -l      I18N options (See below)
     -W      print week number
 
     --theme theme
-            Apply color theme
+            apply color theme
 
 Color options:
 
-    --colormap  Specify colormap
-    --rgb24     Use 24bit RGB color ANSI sequence
+    --colormap  specify colormap
+    --rgb24     use 24bit RGB color ANSI sequence
 
-I18N options:
+i18n options:
 
-    -l          Display I18N options
-    --i18n      Enable I18n options
-    --i18n-v    Display with Territory/Lange information
+    -l          list i18n options
+    --i18n      enable i18n options
+    --i18n-v    display with Territory/Lange information
 
 Color modules:
 
@@ -117,10 +116,11 @@ Using option **-W** or **--weeknumber**, week number is printed at the
 end of every week line.  Week number 1 is a week which include January
 1st and count up on every Sunday.
 
-Experimentally **-W1** print _standard week number_ which start with
-first Sunday of the year, and **-W2** print ISO 8601 style week number.
-Because ISO week start on Monday, the result is not intuitive.  This
-option requires [gcal(1)](http://man.he.net/man1/gcal) command installed.
+Experimentally **-W2** print _standard week number_ which start with
+first Sunday of the year, and **-W3** print ISO 8601 style week number.
+Because ISO week start on Monday, and the command shows a number for
+Sunday, the result is not intuitive and therefore, I guess, useless.
+This option requires [gcal(1)](http://man.he.net/man1/gcal) command installed.
 
 # COLORMAP
 

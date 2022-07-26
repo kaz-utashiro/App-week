@@ -29,14 +29,14 @@ sub FETCH {
 }
 
 my %config = (
-    show_year      => 1,
-    overstruck     => 1,
-    wareki         => undef,
-    netbsd         => undef,
-    crashspace     => undef,
-    tabify         => undef,
-    shortmonth     => undef,
-    weeknumber     => 0,	# 0)none 1)us 2)standard 3)iso
+    show_year  => 1,
+    overstruck => 1,
+    wareki     => undef,
+    netbsd     => undef,
+    crashspace => undef,
+    tabify     => undef,
+    shortmonth => undef,
+    weeknumber => 0,	# 0)none 1)us 2)standard 3)iso
 );
 lock_keys %config;
 
@@ -75,7 +75,8 @@ sub CalYear {
 	}
     }
 
-    tidy_up(\@month);
+    insert_week_number(@month[1..12]) if $config{weeknumber} == 1;
+    tidy_up(@month[1..12]);
 
     my $wareki = $config{wareki} // $month[1][1] =~ /火/;
     for my $month (&show_year($year)) {
@@ -123,24 +124,23 @@ sub gcal {
     $_;
 }
 
+sub insert_week_number {
+    my $n = 1;
+    for my $month (@_) {
+	$month->[0] .= '   ';
+	$month->[1] .= ' CW';
+	for (@{$month}[2..7]) {
+	    my $cw = /\S/ ? sprintf(' %02d', $n) : '   ';
+	    $n++ if /\S$/;
+	    $_ .= $cw;
+	}
+    }
+}
+
 sub tidy_up {
-    my $cals = shift;
-    my $wn = 1;
-    for my $month (@{$cals}[1..12]) {
-	# insert week number
-	if ($config{weeknumber} == 1) {
-	    $month->[0] .= '   ';
-	    $month->[1] .= ' CW';
-	    for (@{$month}[2..7]) {
-		my $next = /\S$/ ? $wn + 1 : $wn;
-		$_ .= /\S/ ? sprintf(' %02d', $wn) : '   ';
-		$wn = $next;
-	    }
-	}
+    for my $month (@_) {
 	# insert frame
-	for (@{$month}) {
-	    $_ = " $_ ";
-	}
+	$_ = " $_ " for @$month;
 	# fix month name:
 	for ($month->[0]) {
 	    # 1) Take care of cal(1) multibyte string bug.

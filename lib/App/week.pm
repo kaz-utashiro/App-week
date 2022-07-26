@@ -101,7 +101,7 @@ use Getopt::EX::Hashed; {
 	    if (/^-+([0-9]+)$/) {
 		$obj->{months} = $1;
 	    } elsif (/^-/) {
-		die "$_: Unknown option\n";
+		die "$_: Option error\n";
 	    } else {
 		push @{$obj->ARGV}, $_;
 	    }
