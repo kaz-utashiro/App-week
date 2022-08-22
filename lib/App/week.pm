@@ -42,7 +42,7 @@ my %DEFAULT_COLORMAP = (
 
 use Getopt::EX::Hashed; {
 
-    Getopt::EX::Hashed->configure(DEFAULT => [ is => 'ro' ]);
+    Getopt::EX::Hashed->configure(DEFAULT => [ is => 'lv' ]);
 
     has ARGV     => default => [];
     has COLORMAP => is => 'rw';
@@ -76,11 +76,11 @@ use Getopt::EX::Hashed; {
     has weeknumber  => ' W :1     ' ;
 
     has '+center' => sub {
-	$_->{after} = $_->{before} = $_[1];
+	$_->after = $_->before = $_[1];
     };
 
     has '+weeknumber' => sub {
-	${$_->config}{weeknumber} = $_[1];
+	${$_->config}{$_[0]} = $_[1];
     };
 
     has '+help' => sub {
@@ -94,18 +94,17 @@ use Getopt::EX::Hashed; {
 	exit;
     };
 
-    has "<>" =>
-	sub {
-	    my $obj = $_;
-	    local $_ = $_[0];
-	    if (/^-+([0-9]+)$/) {
-		$obj->{months} = $1;
-	    } elsif (/^-/) {
-		die "$_: Option error\n";
-	    } else {
-		push @{$obj->ARGV}, $_;
-	    }
-	};
+    has "<>" => sub {
+	my $obj = $_;
+	local $_ = $_[0];
+	if (/^-+([0-9]+)$/) {
+	    $obj->months = $1;
+	} elsif (/^-/) {
+	    die "$_: Option error\n";
+	} else {
+	    push @{$obj->ARGV}, $_;
+	}
+    };
 
 } no Getopt::EX::Hashed;
 
@@ -180,7 +179,7 @@ sub deal_option {
     }
 
     # -p, -P
-    $app->{year_on} //= $app->mon if $app->mday;
+    $app->year_on //= $app->mon if $app->mday;
     if ($app->year_on_all) {
 	App::week::CalYear::Configure show_year => [ 1..12 ];
     }
@@ -195,7 +194,7 @@ sub deal_option {
     }
 
     # -y, -Y
-    $app->{years} //= 1 if $app->show_year;
+    $app->years //= 1 if $app->show_year;
 
     return $app;
 }
@@ -298,7 +297,7 @@ sub cell {
     my @cal = @{$calyear[$y][$m]};
 
     # XXX this is not the best place to initialize...
-    $obj->{cell_width} //= length $cal[2];
+    $obj->cell_width //= length $cal[2];
 
     my %label;
     @label{qw(month week days)} = $d
