@@ -42,7 +42,7 @@ my %DEFAULT_COLORMAP = (
 
 use Getopt::EX::Hashed; {
 
-    Getopt::EX::Hashed->configure(DEFAULT => [ is => 'lv' ]);
+    Getopt::EX::Hashed->configure(DEFAULT => [ is => 'rw' ]);
 
     has ARGV     => default => [];
     has COLORMAP => is => 'rw';

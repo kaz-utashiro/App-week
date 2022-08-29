@@ -43,8 +43,8 @@
       "runtime" : {
          "requires" : {
             "Date::Japanese::Era" : "0",
-            "Getopt::EX" : "v1.23.3",
-            "Getopt::EX::Hashed" : "1.04",
+            "Getopt::EX" : "v2.1.1",
+            "Getopt::EX::Hashed" : "1.05",
             "Getopt::EX::i18n" : "0.09",
             "Getopt::EX::termcolor" : "1.06",
             "Hash::Util" : "0",
