@@ -2,6 +2,10 @@ Revision history for Perl extension App-week
 
 {{$NEXT}}
 
+1.0301 2022-08-29T07:07:09Z
+
+    - use Getopt::EX::Hashed new interface
+
 1.03 2022-07-25T01:44:33Z
 
     - Introduce -W option for week number.

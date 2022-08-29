@@ -1,5 +1,5 @@
 package App::week;
-our $VERSION = "1.03";
+our $VERSION = "1.0301";
 
 use v5.14;
 use warnings;
@@ -343,7 +343,7 @@ B<week> [ -MI<module> ] [ option ] [ date ]
 
 =head1 VERSION
 
-Version 1.03
+Version 1.0301
 
 =head1 DESCRIPTION
 
