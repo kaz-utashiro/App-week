@@ -147,21 +147,23 @@ option with **LABEL**=_colorspec_ syntax.  Default color is:
     --colormap  THISWEEK=L05/445 \
     --colormap THISMONTH=555/113
 
-Besides above, color for day-of-week names can be specified
-individually by following labels.  No color is assigned to these
-labels by default.
+Besides above, color for day-of-week names (and week number) can be
+specified individually by following labels.  No color is assigned to
+these labels by default.
 
-    DOW_SU
-    DOW_MO
-    DOW_TU
-    DOW_WE
-    DOW_TH
-    DOW_FR
-    DOW_SA
+    DOW_SU  Sunday
+    DOW_MO  Monday
+    DOW_TU  Tuesday
+    DOW_WE  Wednesday
+    DOW_TH  Thursday
+    DOW_FR  Friday
+    DOW_SA  Saturday
+    DOW_CW  Week Number
 
-Three digit means 216 RGB values from 000 to 555, and Lxx means 24
-gray scales.  Colormap is handled by [Getopt::EX::Colormap](https://metacpan.org/pod/Getopt%3A%3AEX%3A%3AColormap) module;
-use \`perldoc Getopt::EX::Colormap\` for detail.
+Three digit means 216 RGB values from `000` to `555`, and `L01`
+.. `L24` mean 24 gray scales.  Colormap is handled by
+[Getopt::EX::Colormap](https://metacpan.org/pod/Getopt%3A%3AEX%3A%3AColormap) module; use \`perldoc Getopt::EX::Colormap\` for
+detail.
 
 You can add special effect afterward.  For example, put next line in
 your `~/.weekrc` to blink today.  `$<move>` indicates to move
