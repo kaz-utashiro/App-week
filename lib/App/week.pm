@@ -45,8 +45,8 @@ use Getopt::EX::Hashed; {
     Getopt::EX::Hashed->configure(DEFAULT => [ is => 'rw' ]);
 
     has ARGV     => default => [];
-    has COLORMAP => is => 'rw';
-    has CM       => is => 'rw';
+    has COLORMAP => ;
+    has CM       => ;
 
     my($sec, $min, $hour, $mday, $mon, $year) = CORE::localtime(time);
     has year => default => $year + 1900;
@@ -81,6 +81,14 @@ use Getopt::EX::Hashed; {
 
     has '+weeknumber' => sub {
 	${$_->config}{$_[0]} = $_[1];
+    };
+
+    has '+rgb24' => sub {
+	$Getopt::EX::Colormap::RGB24 = !!$_[1];
+    };
+
+    has '+config' => sub {
+	App::week::CalYear::Configure $_[1] => $_[2];
     };
 
     has '+help' => sub {
@@ -165,17 +173,6 @@ sub deal_option {
 	    name   => '--changeme',
 	    option => '--colormap');
 	exit;
-    }
-
-    # --rgb24
-    if (defined $app->rgb24) {
-	no warnings 'once';
-	$Getopt::EX::Colormap::RGB24 = $app->rgb24;
-    }
-
-    # --config
-    if (%{$app->config}) {
-	App::week::CalYear::Configure %{$app->config};
     }
 
     # -p, -P
