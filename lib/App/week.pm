@@ -80,7 +80,7 @@ use Getopt::EX::Hashed; {
     };
 
     has '+weeknumber' => sub {
-	${$_->config}{$_[0]} = $_[1];
+	App::week::CalYear::Configure $_[0] => $_[1];
     };
 
     has '+rgb24' => sub {
