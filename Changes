@@ -2,6 +2,10 @@ Revision history for Perl extension App-week
 
 {{$NEXT}}
 
+1.0303 2022-11-28T02:50:32Z
+
+    - fix olympic theme color for -W option
+
 1.0302 2022-11-26T23:26:23Z
 
     - make option -W to work
