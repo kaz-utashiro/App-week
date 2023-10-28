@@ -55,7 +55,7 @@ sub CalYear {
     my @monthline = do {
 	map  { $_ - 2 }                 # 2 lines up
 	grep { $cal[$_] =~ /\s 1 \s/x } # find 1st day
-	0 .. $#cal;
+	keys @cal;
     };
     @monthline == 4 or die "cal(1) command format error.\n";
 
@@ -65,8 +65,7 @@ sub CalYear {
     };
 
     my @month = ( [ $cal[0] ], map [], 1..12 );
-    for my $i (0 .. $#monthline) {
-	my $start = $monthline[$i];
+    while (my($i, $start) = each @monthline) {
 	for my $n (0..7) {
 	    my @m = $fielder->($cal[$start + $n]);
 	    push @{$month[$i * 3 + 1]}, $m[0];
