@@ -163,9 +163,10 @@ sub deal_option {
 
     # load --colormap option
     my %colormap = %DEFAULT_COLORMAP;
-    $app->COLORMAP(\%colormap);
-    $app->CM(Getopt::EX::Colormap->new(HASH => \%colormap)
-	     ->load_params(@{$app->colormap}));
+    $app->COLORMAP = \%colormap;
+    $app->CM = Getopt::EX::Colormap
+	->new(HASH => \%colormap)
+	->load_params(@{$app->colormap});
 
     # --colordump
     if ($app->colordump) {
