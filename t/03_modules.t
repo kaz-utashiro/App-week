@@ -20,6 +20,9 @@ SKIP: {
     }
 
     for my $opt (
+	'-Mmlb',
+	'-Mmlb --dodgers',
+	'-Mmlb --dodgers-rev',
 	'-Mnpb',
 	'-Mnpb --lions',
 	'-Mnpb --lions-rev',
