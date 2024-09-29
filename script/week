@@ -60,6 +60,12 @@ Version 1.0303
 By default, B<week> command display the previous, current and next
 month surrounding today, just like B<-3> option of L<cal(1)> command.
 
+=begin html
+
+<p><img width="750" src="https://raw.githubusercontent.com/kaz-utashiro/App-week/refs/heads/master/images/dodgers.png">
+
+=end html
+
 Number of month can be given with dash, or B<-m> option which can be
 mixed up with other parameters.  B<-c> option specifies number of
 columns.
@@ -296,7 +302,7 @@ The following copyright notice applies to all the files provided in
 this distribution, including binary files, unless explicitly noted
 otherwise.
 
-Copyright 2018-2022 Kazumasa Utashiro
+Copyright ©︎ 2018-2024 Kazumasa Utashiro
 
 =cut
 

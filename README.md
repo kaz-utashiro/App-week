@@ -49,6 +49,10 @@ Version 1.0303
 By default, **week** command display the previous, current and next
 month surrounding today, just like **-3** option of [cal(1)](http://man.he.net/man1/cal) command.
 
+<div>
+    <p><img width="750" src="https://raw.githubusercontent.com/kaz-utashiro/App-week/refs/heads/master/images/dodgers.png">
+</div>
+
 Number of month can be given with dash, or **-m** option which can be
 mixed up with other parameters.  **-c** option specifies number of
 columns.
@@ -272,4 +276,4 @@ The following copyright notice applies to all the files provided in
 this distribution, including binary files, unless explicitly noted
 otherwise.
 
-Copyright 2018-2022 Kazumasa Utashiro
+Copyright ©︎ 2018-2024 Kazumasa Utashiro
