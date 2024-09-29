@@ -212,6 +212,10 @@ appropriate module automatically in default start up module
     --green
     --pastel
 
+=item B<-Mmlb> (Major League Baseball)
+
+    --dodgers, --dodgers-rev
+
 =item B<-Mnpb> (Nippon Professional Baseball Organization)
 
     --tigers, --tigers-rev

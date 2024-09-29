@@ -10,6 +10,9 @@ __DATA__
 
 autoload -Mcolors --mono --green --lavender --pastel
 
+autoload -Mmlb \
+	--dodgers --dodgers-rev
+
 autoload -Mnpb \
 	--giants --giants-rev \
 	--tigers --tigers-rev \
