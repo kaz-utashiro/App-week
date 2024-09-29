@@ -72,7 +72,7 @@
          "web" : "https://github.com/kaz-utashiro/App-week"
       }
    },
-   "version" : "1.0303",
+   "version" : "1.04",
    "x_authority" : "cpan:UTASHIRO",
    "x_contributors" : [
       "Kazumasa Utashiro <kaz@utashiro.com>",
