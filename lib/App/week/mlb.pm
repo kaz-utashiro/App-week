@@ -26,3 +26,18 @@ option --dodgers \
 	$<ignore>
 
 option --dodgers-rev --dodgers
+
+define YksNavy  #0c2340
+define YksBlue  #003087
+define YksBlack #1a263d
+define YksRed   #cb483e
+define YksGray  #c4ced3
+
+option --yankees \
+	--stripe \
+	--cm *MONTH=*DAYS=YksNavy/WHITE \
+	--cm FRAME=WHITE/YksNavy,*WEEK=WHITE/YksNavy \
+	--cm THISDAY=WHITE/YksRed,THISMONTH=THISDAYS=YksNavy/YksGray \
+	$<ignore>
+
+option --yankees-rev --yankees

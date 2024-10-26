@@ -305,7 +305,7 @@ sub cell {
     $cal[0] = $obj->color($label{month}, $cal[0]);
     $cal[1] = $obj->color($label{week},
 			  state $week = $obj->week_line($cal[1]));
-    my $day_re = $d ? qr/^(?: [ \d]{2}){0,6} \K(${\(sprintf '%2d', $d)})\b/ : undef;
+    my $day_re = $d ? qr/^(?:.[ \d]{2}){0,6}.\K(${\(sprintf '%2d', $d)})\b/ : undef;
     for (@cal[ 2 .. $#cal ]) {
 	s/$day_re/$obj->color("THISDAY", $1)/e if $day_re;
 	$_ = $obj->color($label{days}, $_);

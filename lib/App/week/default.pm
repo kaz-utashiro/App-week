@@ -25,6 +25,8 @@ autoload -Molympic \
 	--gold-frame \
 	--para2020 --para2020-rev
 
+option --stripe --config stripe=1
+
 option --themecolor::bg \
 	-Mtermcolor::bg(default=100,light=--$<shift>,dark=--$<shift>-rev)
 

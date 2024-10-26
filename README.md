@@ -201,6 +201,7 @@ appropriate module automatically in default start up module
 - **-Mmlb** (Major League Baseball)
 
         --dodgers, --dodgers-rev
+        --yankees, --yankees-rev
 
 - **-Mnpb** (Nippon Professional Baseball Organization)
 

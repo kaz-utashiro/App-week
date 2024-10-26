@@ -221,6 +221,7 @@ appropriate module automatically in default start up module
 =item B<-Mmlb> (Major League Baseball)
 
     --dodgers, --dodgers-rev
+    --yankees, --yankees-rev
 
 =item B<-Mnpb> (Nippon Professional Baseball Organization)
 

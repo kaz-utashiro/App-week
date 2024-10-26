@@ -37,6 +37,7 @@ my %config = (
     tabify     => undef,
     shortmonth => undef,
     weeknumber => 0,	# 0)none 1)us 2)standard 3)iso
+    stripe     => 0,
 );
 lock_keys %config;
 
@@ -136,10 +137,19 @@ sub insert_week_number {
     }
 }
 
+use Unicode::EastAsianWidth;
+
 sub tidy_up {
     for my $month (@_) {
 	# insert frame
-	$_ = " $_ " for @$month;
+	$_ = " $_ " for @{$month}[0..1];
+	for (@{$month}[2..$#{$month}]) {
+	    my $c = ' ';
+	    if (my $stripe = $config{stripe}) {
+		$c = $stripe =~ /\D/ ? $stripe : '│';
+	    }
+	    $_ = $c . s/(\p{InFullwidth}|..)( )/$1$c/gr . $c;
+	}
 	# fix month name:
 	for ($month->[0]) {
 	    # 1) Take care of cal(1) multibyte string bug.
