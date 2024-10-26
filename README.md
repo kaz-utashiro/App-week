@@ -50,7 +50,8 @@ By default, **week** command display the previous, current and next
 month surrounding today, just like **-3** option of [cal(1)](http://man.he.net/man1/cal) command.
 
 <div>
-    <p><img width="750" src="https://raw.githubusercontent.com/kaz-utashiro/App-week/refs/heads/master/images/dodgers.png">
+    <p>
+    <img width="750" src="https://raw.githubusercontent.com/kaz-utashiro/App-week/refs/heads/master/images/dodgers.png">
 </div>
 
 Number of month can be given with dash, or **-m** option which can be
@@ -120,12 +121,29 @@ Using option **-W** or **--weeknumber**, week number is printed at the
 end of every week line.  Week number 1 is a week which include January
 1st and count up on every Sunday.
 
-Experimentally option **-W2** print the _standard week number_ which
-start with the first Sunday of the year, and **-W3** print ISO 8601
-style week number.  Because ISO week start on Monday, and the command
-shows a number of Sunday of the week, the result is not intuitive and
-therefore, I guess, useless.  This option requires [gcal(1)](http://man.he.net/man1/gcal) command
-installed.
+<div>
+    <p>
+    <img width="250" src="https://raw.githubusercontent.com/kaz-utashiro/App-week/refs/heads/master/images/cw1.png">
+</div>
+
+Option **-W2** print the _standard week number_ which start with the
+first Sunday of the year.
+
+<div>
+    <p>
+    <img width="250" src="https://raw.githubusercontent.com/kaz-utashiro/App-week/refs/heads/master/images/cw2.png">
+</div>
+
+Option **-W3** print ISO 8601 style week number.  Because ISO week
+start on Monday, and the command shows a number of Sunday of the week,
+the result is not intuitive and therefore, I guess, useless.
+
+<div>
+    <p>
+    <img width="250" src="https://raw.githubusercontent.com/kaz-utashiro/App-week/refs/heads/master/images/cw3.png">
+</div>
+
+Option **-W2** and **-W3** require [gcal(1)](http://man.he.net/man1/gcal) command installed.
 
 # COLORMAP
 

@@ -60,11 +60,8 @@ Version 1.04
 By default, B<week> command display the previous, current and next
 month surrounding today, just like B<-3> option of L<cal(1)> command.
 
-=begin html
-
-<p><img width="750" src="https://raw.githubusercontent.com/kaz-utashiro/App-week/refs/heads/master/images/dodgers.png">
-
-=end html
+=for html <p>
+<img width="750" src="https://raw.githubusercontent.com/kaz-utashiro/App-week/refs/heads/master/images/dodgers.png">
 
 Number of month can be given with dash, or B<-m> option which can be
 mixed up with other parameters.  B<-c> option specifies number of
@@ -133,12 +130,23 @@ Using option B<-W> or B<--weeknumber>, week number is printed at the
 end of every week line.  Week number 1 is a week which include January
 1st and count up on every Sunday.
 
-Experimentally option B<-W2> print the I<standard week number> which
-start with the first Sunday of the year, and B<-W3> print ISO 8601
-style week number.  Because ISO week start on Monday, and the command
-shows a number of Sunday of the week, the result is not intuitive and
-therefore, I guess, useless.  This option requires L<gcal(1)> command
-installed.
+=for html <p>
+<img width="250" src="https://raw.githubusercontent.com/kaz-utashiro/App-week/refs/heads/master/images/cw1.png">
+
+Option B<-W2> print the I<standard week number> which start with the
+first Sunday of the year.
+
+=for html <p>
+<img width="250" src="https://raw.githubusercontent.com/kaz-utashiro/App-week/refs/heads/master/images/cw2.png">
+
+Option B<-W3> print ISO 8601 style week number.  Because ISO week
+start on Monday, and the command shows a number of Sunday of the week,
+the result is not intuitive and therefore, I guess, useless.
+
+=for html <p>
+<img width="250" src="https://raw.githubusercontent.com/kaz-utashiro/App-week/refs/heads/master/images/cw3.png">
+
+Option B<-W2> and B<-W3> require L<gcal(1)> command installed.
 
 =head1 COLORMAP
 
