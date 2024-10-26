@@ -5,6 +5,8 @@ use Test::More;
 use File::Spec;
 use open IO => ':utf8';
 
+$ENV{HOME} = File::Spec->rel2abs('t/home');
+
 use Data::Dumper;
 {
     no warnings 'redefine';
