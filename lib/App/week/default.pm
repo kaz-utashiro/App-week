@@ -11,7 +11,8 @@ __DATA__
 autoload -Mcolors --mono --green --lavender --pastel
 
 autoload -Mmlb \
-	--dodgers --dodgers-rev
+	--dodgers --dodgers-rev \
+	--yankees --yankees-rev
 
 autoload -Mnpb \
 	--giants --giants-rev \
