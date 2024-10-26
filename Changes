@@ -2,6 +2,10 @@ Revision history for Perl extension App-week
 
 {{$NEXT}}
 
+1.05 2024-10-26T06:27:56Z
+
+    - implement --yankees option with --strip option
+
 1.04 2024-09-29T06:02:05Z
 
     - implement -Mmlb module and --dodgers option
