@@ -42,7 +42,7 @@ Color modules:
 
 # VERSION
 
-Version 1.05
+Version 1.06
 
 # DESCRIPTION
 
@@ -300,4 +300,4 @@ The following copyright notice applies to all the files provided in
 this distribution, including binary files, unless explicitly noted
 otherwise.
 
-Copyright ©︎ 2018-2024 Kazumasa Utashiro
+Copyright ©︎ 2018-2025 Kazumasa Utashiro
