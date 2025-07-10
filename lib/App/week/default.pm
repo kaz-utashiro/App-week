@@ -33,7 +33,7 @@ option --themecolor::bg \
 
 option --theme --themecolor::bg $<copy(0,1)>
 
-option --i18n   -Mi18n::setopt(dash=0,long=0,listopt=-l)
-option --i18n-v -Mi18n::setopt(dash=0,long=0,listopt=-l,verbose)
+option --i18n   -Mi18n::setopt(env=LC_TIME,dash=0,long=0,listopt=-l)
+option --i18n-v -Mi18n::setopt(env=LC_TIME,dash=0,long=0,listopt=-l,verbose)
 
 autoload --i18n -l

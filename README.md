@@ -97,15 +97,18 @@ set the **-y** option.
 
 # INTERNATIONAL SUPPORT
 
-It is possible display calendar in various language by setting `LANG`
-environment.
+It is possible display calendar in various language by setting locale
+environment variables.
 
     LANG=et_EE week
+    LC_TIME=et_EE week
 
 This command come with **-Mi18n** module which provides easy way to
 specify language by command option.  Option **-l** displays option list
 provided by **-Mi18n** module and option **--i18n** and **--i18n-v**
-enables them.  See [Getopt::EX::i18n](https://metacpan.org/pod/Getopt%3A%3AEX%3A%3Ai18n).
+enables them.  When using **--i18n** options, the `LC_TIME` environment
+variable is set to control date and time formatting specifically.
+See [Getopt::EX::i18n](https://metacpan.org/pod/Getopt%3A%3AEX%3A%3Ai18n).
 
     $ week --i18n-v --et
 
@@ -200,7 +203,9 @@ all following arguments here, so that insert this option at the end.
 - **--i18n-v**
 
     Both of these enables I18N options and Territory/Language information
-    will be shown if used **--i18n-v**.
+    will be shown if used **--i18n-v**.  These options set the `LC_TIME`
+    environment variable to control date and time formatting specifically,
+    rather than the general `LANG` variable.
 
 # MODULES
 
