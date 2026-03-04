@@ -1,7 +1,7 @@
 package App::week;
 our $VERSION = "1.06";
 
-use v5.14;
+use v5.24;
 use warnings;
 
 use utf8;

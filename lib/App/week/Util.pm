@@ -1,6 +1,6 @@
 package App::week;
 
-use v5.14;
+use v5.24;
 use warnings;
 use utf8;
 

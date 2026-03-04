@@ -51,7 +51,7 @@
             "List::Util" : "1.45",
             "Text::ANSI::Fold" : "2.13",
             "Text::VisualWidth::PP" : "0.05",
-            "perl" : "v5.14.0"
+            "perl" : "v5.24.0"
          }
       },
       "test" : {
