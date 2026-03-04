@@ -61,7 +61,7 @@ package Script {
     }
     sub result {
 	my $obj = shift;
-	$obj->{RESULT};
+	$obj->{RESULT} =~ s/\N{NBSP}/ /gr;
     }
     sub execute {
 	exec $^X, "-I$lib", $script, @_;

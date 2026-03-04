@@ -54,7 +54,7 @@ use Getopt::EX::Hashed; {
     has mon  => default => $mon + 1;
 
     has cell_width   => default => undef;
-    has frame        => default => '  ';
+    has frame        => default => "\N{NBSP}\N{NBSP}";
     has frame_height => default => 1;
 
     # option params
@@ -273,7 +273,7 @@ sub display {
 sub h_rule {
     my $obj = shift;
     my $column = shift;
-    my $hr1 = " " x $obj->cell_width;
+    my $hr1 = "\N{NBSP}" x $obj->cell_width;
     my $s = join($obj->frame, '', ($hr1) x $column, '');
     my $rule = $obj->color(FRAME => $s) . "\n";
     print $rule x $obj->frame_height;
