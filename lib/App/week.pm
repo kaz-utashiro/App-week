@@ -17,6 +17,13 @@ use Getopt::EX::Colormap;
 use App::week::Util;
 use App::week::CalYear qw(@calyear);
 
+use Exporter 'import';
+our @EXPORT_OK = qw(week);
+
+sub week {
+    __PACKAGE__->new->run(@_);
+}
+
 my @DOW_LABELS = qw(
     DOW_SU
     DOW_MO
@@ -48,10 +55,9 @@ use Getopt::EX::Hashed; {
     has COLORMAP => ;
     has CM       => ;
 
-    my($sec, $min, $hour, $mday, $mon, $year) = CORE::localtime(time);
-    has year => default => $year + 1900;
-    has mday => default => $mday;
-    has mon  => default => $mon + 1;
+    has year => ;
+    has mday => ;
+    has mon  => ;
 
     has cell_width   => default => undef;
     has frame        => default => "\N{NBSP}\N{NBSP}";
@@ -130,13 +136,23 @@ sub run {
     my $app = shift;
     local @ARGV = decode_argv @_;
 
-    $app->read_option()
+    $app->initialize()
+	->read_option()
 	->argv()
 	->deal_option()
 	->prepare()
 	->show();
 
     return 0;
+}
+
+sub initialize {
+    my $app = shift;
+    my $t = localtime;
+    $app->year = $t->year + 1900;
+    $app->mon  = $t->mon + 1;
+    $app->mday = $t->mday;
+    return $app;
 }
 
 sub read_option {

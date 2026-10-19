@@ -3,8 +3,8 @@
 use v5.24;
 use warnings;
 
-use  App::week;
-exit App::week->new->run(@ARGV);
+use App::week qw(week);
+exit week(@ARGV);
 
 __END__
 
