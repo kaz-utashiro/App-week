@@ -2,6 +2,11 @@ Revision history for Perl extension App-week
 
 {{$NEXT}}
 
+1.0701 2026-10-19T16:36:06Z
+
+    - Export week() function to make it callable from Command::Run
+    - Initialize today's date on each run instead of at module load time
+
 1.07 2026-03-04T08:55:54Z
 
     - Use NBSP for frame characters so that sl-2026 can detect them
