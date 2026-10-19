@@ -18,4 +18,5 @@ os = [
 exclude_match = [
     '^docs/.*',
     '^images/.*',
+    '^CLAUDE\.md$',
 ]
